@@ -6,7 +6,7 @@
     <title>Environment Setup :: RHTE Workshop - Deployment Strategies with Argo CD and Argo Rollouts</title>
     <link rel="canonical" href="https://github.com/rhte2023-argo-rollouts/redhat-workshop-deployment-strategies/redhat-workshop-deployment-strategies/01-setup.html">
     <link rel="prev" href="index.html">
-    <link rel="next" href="03-deployment-strategies.html">
+    <link rel="next" href="02-deployment-strategies.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -102,16 +102,13 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="03-deployment-strategies.html">2. Deployment Strategies with Argo CD and Argo Rollouts</a>
+    <a class="nav-link" href="02-deployment-strategies.html">2. Deployment Strategies with Argo CD and Argo Rollouts</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="05-blue-green-deployment.html">3. Blue/Green deployment strategy</a>
+    <a class="nav-link" href="03-blue-green-deployment.html">3. Blue/Green deployment strategy</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="06-canary-deployment.html">4. Canary deployment strategy</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="Annex-1-cluster-setup.html">Annex 1 - Cluster Setup</a>
+    <a class="nav-link" href="04-canary-deployment.html">4. Canary deployment strategy</a>
   </li>
 </ul>
   </li>
@@ -156,7 +153,7 @@
 <h2 id="01-prerequisites"><a class="anchor" href="#01-prerequisites"></a>Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>During this tutorial, will be required to work with different tools for running the exercises included. Please install the following software:</p>
+<p>During this tutorial, it will be required to work with different tools for running the exercises included. Please install the following software:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -196,6 +193,20 @@
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/argoproj/argo-rollouts/releases/download/v1.3.1/kubectl-argo-rollouts-linux-arm64">Download</a></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/argoproj/argo-rollouts/releases/download/v1.3.1/kubectl-argo-rollouts-windows-amd64">Download</a></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation">Git - Docs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">helm</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://get.helm.sh/helm-v3.10.3-linux-amd64.tar.gz">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://get.helm.sh/helm-v3.10.3-darwin-amd64.tar.gz">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://get.helm.sh/helm-v3.10.3-windows-amd64.zip">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://helm.sh/docs/intro/install/">Helm - Docs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Visual Studio Code</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://code.visualstudio.com/sha/download?build=stable&amp;os=linux-rpm-x64">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://code.visualstudio.com/sha/download?build=stable&amp;os=darwin">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://code.visualstudio.com/sha/download?build=stable&amp;os=win32-user">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://code.visualstudio.com/">Visual Studio Code - Docs</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -384,16 +395,16 @@ Please pay special attention to <em>oc CLI</em>  because you will need to use th
 <div class="ulist">
 <ul>
 <li>
-<p><strong>%USER%-gitops-argocd</strong>: It will contain all the GitOps objects.</p>
+<p><strong>%USER%-gitops-argocd</strong>: It contains Argo CD installation and all the GitOps objects.</p>
 </li>
 <li>
-<p><strong>%USER%-blue-green</strong>: Will contain the application using Blue/Green deployment.</p>
+<p><strong>%USER%-blue-green</strong>: It will contain the application using Blue/Green deployment.</p>
 </li>
 <li>
-<p><strong>%USER%-canary</strong>: Will contain the application using Canary deployment.</p>
+<p><strong>%USER%-canary</strong>: It will contain the application using Canary deployment.</p>
 </li>
 <li>
-<p><strong>%USER%-canary-service-mesh</strong>: Will contain the application using Canary deployment with Service Mesh.</p>
+<p><strong>%USER%-canary-service-mesh</strong>: It will contain the application using Canary deployment with Service Mesh.</p>
 </li>
 </ul>
 </div>
@@ -454,13 +465,13 @@ cd shop-application-helm-chart</code></pre>
 <h2 id="01-clusterSetup"><a class="anchor" href="#01-clusterSetup"></a>Cluster Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you want to know better the required information and procedures to set up an Openshift cluster to run this workshop, please check <a href="Annex-1-cluster-setup.html" class="xref page">Annex 1</a></p>
+<p>Please visit <a href="https://github.com/rhte2023-argo-rollouts/ocp-cluster-setup.git">Openshift Cluster Setup</a> for more information about setting up an Openshift cluster in order to run this workshop.</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html" class="query-params-link">Workshop</a></span>
-  <span class="next"><a href="03-deployment-strategies.html" class="query-params-link">2. Deployment Strategies with Argo CD and Argo Rollouts</a></span>
+  <span class="next"><a href="02-deployment-strategies.html" class="query-params-link">2. Deployment Strategies with Argo CD and Argo Rollouts</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
