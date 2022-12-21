@@ -149,10 +149,119 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Blue/Green deployment strategy</h1>
-<div id="preamble">
+<div class="sect1">
+<h2 id="_application_architecture"><a class="anchor" href="#_application_architecture"></a>Application architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We are going to create the application <code>dstrategies</code>, that we will use to test Blue/Green deployment. Because we will make changes in the application&#8217;s GitHub repository, we have to use the repository that you have just forked. Please edit the following yaml and set your own GitHub repository in the <code>reportURL</code>. Create a file called <code>application-dstrategies-blue-green.yaml</code></p>
+<p>As mentioned before, we have a very simple application that has two services. One frontal React app call <code>DStrategies-front</code> and one backend Quarkus app call <code>dstrategies-back</code>. We will use the front app to call several times the back app and see how the back version change during the deployment.</p>
+</div>
+<div class="paragraph">
+<p>To achieve Blue/Green deployment with <code>Cloud Native</code> applications using <strong>Argo Rollouts</strong>, we have designed this architecture.</p>
+</div>
+<div class="paragraph">
+<p>This is the initial situation after deploying the application:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rollout-blue-green-step-0.png" alt="DStrategies initial status">
+</div>
+</div>
+<div class="paragraph">
+<p>OpenShift Components - Online</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Routes and Services declared with the suffix -online</p>
+</li>
+<li>
+<p>Routes mapped only to the online services</p>
+</li>
+<li>
+<p>Services mapped to the rollout.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>OpenShift Components - Offline</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Routes and Services declared with the suffix -offline</p>
+</li>
+<li>
+<p>Routes mapped only to the offline services</p>
+</li>
+<li>
+<p>Services mapped to the rollout</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We will define an active or online service 'dstrategies-back-online' and a preview or offline service 'dstrategies-back-offline'. The idea is the frontend will always use 'dstrategies-back-online' and 'dstrategies-back-offline' will only be used to test our service before trigerring the rollout.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_generate_dstrategies_app_gitops_deployment_model"><a class="anchor" href="#_generate_dstrategies_app_gitops_deployment_model"></a>Generate DStrategies APP GitOps Deployment Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First of all, it is required to review a set of objects in a our forked git repository in order to configure the deployment correctly for deploying our application following a GitOps model.</p>
+</div>
+<div class="paragraph">
+<p>Please follow the next section to understand the required objects and configurations.</p>
+</div>
+<div class="sect2">
+<h3 id="_review_services"><a class="anchor" href="#_review_services"></a>Review Services</h3>
+<div class="paragraph">
+<p>As the previous picture showns, it is required to generate a couple of services that will be used to redirect the traffic to the correct DStrategies App version.</p>
+</div>
+<div class="paragraph">
+<p>Please take a look at the files <strong>./blue-green/dstrategies-back-service-online.yaml</strong> and <strong>./blue-green/dstrategies-back-service-offline.yaml</strong> in order to understand the objects and get the names of these elements.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modify_rollout_strategy"><a class="anchor" href="#_modify_rollout_strategy"></a>Modify Rollout strategy</h3>
+<div class="paragraph">
+<p>The Rollout object controls the application deployment. If you look closely, it is possible to find many similarities between an Argo Rollout objects and a Kubernetes Deployment. The main different btween the previous objects referenced is the rollout strategy field.</p>
+</div>
+<div class="paragraph">
+<p>Please edit a file named <strong>./blue-green/dstrategies-back-rollout.yaml</strong> in oder to add the required <strong>&lt;SERVICE_OFFLINE&gt;</strong> and <strong>&lt;SERVICE_ONLINE&gt;</strong> service names:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  strategy:
+    blueGreen:
+      activeService: dstrategies-back-online
+      autoPromotionEnabled: false
+      prePromotionAnalysis:
+        templates:
+          - templateName: dstrategies-back-analysis-template
+      previewService: dstrategies-back-offline</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modify_analysis_template"><a class="anchor" href="#_modify_analysis_template"></a>Modify Analysis Template</h3>
+<div class="paragraph">
+<p>We have created an AnalysisTemplate 'dstrategies-back-analysis-template' that just validates the health of the application, for production environments a better analysis should be done. <strong>Argo Rollouts</strong> use this AnalysisTemplate to validate a new version and set whether it is ready to be promoted or not. To learn more, please read <a href="https://argoproj.github.io/argo-rollouts/features/bluegreen/">this</a>.</p>
+</div>
+<div class="paragraph">
+<p>CONTINUE</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modify_back_service_url"><a class="anchor" href="#_modify_back_service_url"></a>Modify back service URL</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_argo_cd_application"><a class="anchor" href="#_argo_cd_application"></a>Argo CD Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We are going to create the application <code>DStrategies</code>, that we will use to test Blue/Green deployment. Because we will make changes in the application&#8217;s GitHub repository, we have to use the repository that you have just forked. Please edit the following yaml and set your own GitHub repository in the <code>reportURL</code>. Create a file called <code>application-dstrategies-blue-green.yaml</code></p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -190,81 +299,24 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>Looking at the Argo CD dashboard, you would notice that we have a new <code>dstrategies</code> application.</p>
+<p>Looking at the Argo CD dashboard, you would notice that we have a new <code>DStrategies</code> application.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/argocd_dstrategies-blue-green.png" alt="ArgoCD Dstrategies">
+<img src="_images/argocd_dstrategies-blue-green.png" alt="ArgoCD DStrategies">
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_application_architecture"><a class="anchor" href="#_application_architecture"></a>Application architecture</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>We have a very simple application that has two services. One frontal React app call <code>dstrategies-front</code> and one backend Quarkus app call <code>dstrategies-back</code>. We will use the front app to call several times the back app and see how the back version change during the deployment.</p>
-</div>
-<div class="paragraph">
-<p>To achieve Blue/Green deployment with <code>Cloud Native</code> applications using <strong>Argo Rollouts</strong>, we have designed this architecture.</p>
-</div>
-<div class="paragraph">
-<p>This is our current status:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/rollout-blue-green-step-0.png" alt="Dstrategies initial status">
-</div>
-</div>
-<div class="paragraph">
-<p>OpenShift Components - Online</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Routes and Services declared with the suffix -online</p>
-</li>
-<li>
-<p>Routes mapped only to the online services</p>
-</li>
-<li>
-<p>Services mapped to the rollout.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>OpenShift Components - Offline</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Routes and Services declared with the suffix -offline</p>
-</li>
-<li>
-<p>Routes mapped only to the offline services</p>
-</li>
-<li>
-<p>Services mapped to the rollout</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>We have defined an active or online service 'dstrategies-back-online' and a preview or offline service 'dstrategies-back-offline'. Final user will always use 'dstrategies-back-online'.</p>
-</div>
-<div class="paragraph">
-<p>We have created an AnalysisTemplate 'dstrategies-back-analysis-template' that just validates the health of the application, for production environments a better analysis should be done. <strong>Argo Rollouts</strong> use this AnalysisTemplate to validate a new version and set whether it is ready to be promoted or not. To learn more, please read <a href="https://argoproj.github.io/argo-rollouts/features/bluegreen/">this</a>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  strategy:
-    blueGreen:
-      activeService: dstrategies-back-online
-      previewService: dstrategies-back-offline
-      autoPromotionEnabled: false
-      prePromotionAnalysis:
-        templates:
-          - templateName: dstrategies-back-analysis-template</code></pre>
-</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is important to wait for <strong>Healthy</strong> and <strong>Synced</strong> status in the Argo CD Application
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
