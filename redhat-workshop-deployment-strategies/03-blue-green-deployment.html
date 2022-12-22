@@ -233,27 +233,78 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  strategy:
     blueGreen:
-      activeService: dstrategies-back-online
+      activeService: &lt;SERVICE_ONLINE&gt;
       autoPromotionEnabled: false
       prePromotionAnalysis:
         templates:
           - templateName: dstrategies-back-analysis-template
-      previewService: dstrategies-back-offline</code></pre>
+      previewService: &lt;SERVICE_OFFLINE&gt;</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_modify_analysis_template"><a class="anchor" href="#_modify_analysis_template"></a>Modify Analysis Template</h3>
 <div class="paragraph">
-<p>We have created an AnalysisTemplate 'dstrategies-back-analysis-template' that just validates the health of the application, for production environments a better analysis should be done. <strong>Argo Rollouts</strong> use this AnalysisTemplate to validate a new version and set whether it is ready to be promoted or not. To learn more, please read <a href="https://argoproj.github.io/argo-rollouts/features/bluegreen/">this</a>.</p>
+<p>We have created an AnalysisTemplate 'dstrategies-back-analysis-template' that just validates the health of the application, for production environments a better analysis should be done. <strong>Argo Rollouts</strong> use this AnalysisTemplate to validate a new version and set whether it is ready to be promoted or not.</p>
 </div>
 <div class="paragraph">
-<p>CONTINUE</p>
+<p>Please edit a file named <strong>./blue-green/dstrategies-back-analysis-template.yaml</strong> in oder to add the required <strong>&lt;USERNAME&gt;</strong> that references the user namespace in the healthcheck url.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  metrics:
+    - name: dstrategies-back-webmetric
+      provider:
+        web:
+          jsonPath: '{$.status}'
+          url: &gt;-
+            <a href="http://dstrategies-back-offline.&lt;USERNAME&gt;-blue-green.svc.cluster.local:8080/q/health/ready" class="bare">http://dstrategies-back-offline.&lt;USERNAME&gt;-blue-green.svc.cluster.local:8080/q/health/ready</a>
+      successCondition: result == 'UP'</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For more information about AnalysisTemplate, please visit the following <a href="https://argoproj.github.io/argo-rollouts/features/bluegreen/">link</a>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_modify_back_service_url"><a class="anchor" href="#_modify_back_service_url"></a>Modify back service URL</h3>
-
+<div class="paragraph">
+<p>Finally, it is required to create a <strong>Deployment</strong> object in order to deploy the frontend application. This application helps us to test the blue-green rollout strategy from a web interface and see backend information.</p>
+</div>
+<div class="paragraph">
+<p>In order to allow communication between the frontend and the backend, it is required to edit the file named <strong>./blue-green/dstrategies-frontend-deployment.yaml</strong> in oder to add the required <strong>&lt;USERNAME&gt;</strong> and <strong>&lt;OCP_DOMAIN&gt;</strong>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">        env:
+          - name: REACT_APP_BACK
+            value: <a href="http://dstrategies-back-online-&lt;USERNAME&gt;-blue-green.&lt;OCP_DOMAIN&gt;/dstrategies-back" class="bare">http://dstrategies-back-online-&lt;USERNAME&gt;-blue-green.&lt;OCP_DOMAIN&gt;/dstrategies-back</a>
+          - name: REACT_APP_CATEGORY
+            value: BLUE-GREEN</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_commit_and_push_the_changes"><a class="anchor" href="#_commit_and_push_the_changes"></a>Commit and Push the Changes</h3>
+<div class="paragraph">
+<p>Once all the files are configured correctly, it is time to commit and push all changes to the repository that you have just forked.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">git add .
+git commit -m "Configured DStrategies App deployment files"
+git push</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -261,7 +312,7 @@
 <h2 id="_argo_cd_application"><a class="anchor" href="#_argo_cd_application"></a>Argo CD Application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We are going to create the application <code>DStrategies</code>, that we will use to test Blue/Green deployment. Because we will make changes in the application&#8217;s GitHub repository, we have to use the repository that you have just forked. Please edit the following yaml and set your own GitHub repository in the <code>reportURL</code>. Create a file called <code>application-dstrategies-blue-green.yaml</code></p>
+<p>We are going to create the application <code>DStrategies</code> in order to apply the files modified previously, that we will use to test Blue/Green deployment. Please edit the following yaml and set your own GitHub repository in the <code>reportURL</code>. Create a file called <code>application-dstrategies-blue-green.yaml</code></p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -276,16 +327,9 @@ spec:
     namespace: %USER%-blue-green
     server: 'https://kubernetes.default.svc'
   source:
-    path: helm/helm-umbrella-dstrategies/chart
+    path: blue-green
     repoURL: <a href="https://github.com/change_me/dstrategies-helm-chart" class="bare">https://github.com/change_me/dstrategies-helm-chart</a>
     targetRevision: HEAD
-    helm:
-      parameters:
-      - name: "global.namespace"
-        value: %USER%-blue-green
-      valueFiles:
-        - values/blue-green/values.yaml
-        - values/blue-green/values-image-tag.yaml
   project: default
   syncPolicy:
     automated:
@@ -324,25 +368,32 @@ It is important to wait for <strong>Healthy</strong> and <strong>Synced</strong>
 <h2 id="_test_dstrategies_application"><a class="anchor" href="#_test_dstrategies_application"></a>Test Dstrategies application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We have deployed the <code>dstrategies</code> with ArgoCD. We can test that it is up and running.</p>
+<p>We have deployed the <code>dstrategies</code> with ArgoCD. We can test the online and offline services in order to ensure that they are up and running.</p>
 </div>
 <div class="paragraph">
-<p>TODO change to front</p>
+<p>In order to test the online service, it is required to extract the frontend url:</p>
+</div>
+<div class="listingblock lines_space console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get route dstrategies-frontend -n %USER%-blue-green -o jsonpath='{.spec.host}'</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>We have to get the Online route</p>
+<p>Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying in your screen:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-blue-green.png" alt="Frontend Interface">
+</div>
+<div class="title">Figure 1. Frontend Interface</div>
+</div>
+<div class="paragraph">
+<p>In addition, regarding testing the offline service, it is required to get the Offline route:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">curl "$(oc get routes dstrategies-back-online -n %USER%-blue-green --template='https://{{.spec.host}}')/dstrategies-back"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And the Offline route</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">curl "$(oc get routes dstrategies-back-offline -n %USER%-blue-green --template='https://{{.spec.host}}')/dstrategies-back"</code></pre>
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">curl "$(oc get routes dstrategies-back-offline -n %USER%-blue-green --template='http://{{.spec.host}}')/dstrategies-back"
+{"metadata":{"version":"V1.0.0","colour":"Blue"}}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -366,7 +417,7 @@ Argo Rollouts offers a Kubectl plugin to enrich the experience with Rollouts <a 
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">kubectl argo rollouts get rollout dstrategies-back --watch -n %USER%-blue-green</code></pre>
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">oc argo rollouts get rollout dstrategies-back --watch -n %USER%-blue-green</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -382,7 +433,7 @@ Argo Rollouts offers a Kubectl plugin to enrich the experience with Rollouts <a 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_dstrategies_back_bluegreen_deployment"><a class="anchor" href="#_dstrategies_back_bluegreen_deployment"></a>Dstrategies-back Blue/Green deployment</h2>
+<h2 id="_dstrategies_back_bluegreen_deployment"><a class="anchor" href="#_dstrategies_back_bluegreen_deployment"></a>DStrategies-back Blue/Green deployment</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We have split a <code>Cloud Native</code> Blue/Green deployment into two steps:</p>
@@ -406,13 +457,16 @@ Argo Rollouts offers a Kubectl plugin to enrich the experience with Rollouts <a 
 <div class="sect2">
 <h3 id="_step_1_deploy_a_new_version"><a class="anchor" href="#_step_1_deploy_a_new_version"></a>Step 1 - Deploy a new version</h3>
 <div class="paragraph">
-<p>We will deploy a new version <code>V2.0.0</code>. To do it, we have to edit the file <code>helm/helm-umbrella-dstrategies/chart/values/blue-green/values-image-tag.yaml</code> under <code>dstrategies-back</code> set <code>tag</code> value to <code>V2.0.0</code></p>
+<p>We will deploy a new version <code>V2.0.0</code>. To do it, we have to edit the file <strong>./blue-green/dstrategies-back-rollout.yaml</strong> and <strong>./blue-green/dstrategies-back-configmap.yaml</strong> in order to modify the value <strong>v1.0.0</strong> to <strong>V2.0.0</strong>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">dstrategies-back:
-   image:
-     tag: V2.0.0</code></pre>
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">          image: 'quay.io/dseveria/dstrategies-back:V1.0.0'</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">  application.version: V1.0.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -430,7 +484,7 @@ git push</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/argocd-Dstrategies-blue-green-Refresh.png" alt="Refresh Dstrategies">
+<img src="_images/argocd-Dstrategies-blue-green-Refresh.png" alt="Refresh DStrategies">
 </div>
 </div>
 <div class="paragraph">
@@ -438,7 +492,8 @@ git push</code></pre>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">NAME                                  KIND         STATUS        AGE  INFO
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">oc argo rollouts get rollout dstrategies-back --watch -n %USER%-blue-green
+NAME                                  KIND         STATUS        AGE  INFO
 ⟳ dstrategies-back                            Rollout      ॥ Paused      27m
 ├──# revision:2
 │  ├──⧉ dstrategies-back-9dc6f576f            ReplicaSet   ✔ Healthy     36s  preview
@@ -462,9 +517,30 @@ git push</code></pre>
 <img src="_images/rollout-blue-green-step-1.png" alt="&quot;Dstrategies Step 1">
 </div>
 </div>
-<div class="literalblock">
+<div class="paragraph">
+<p>In order to test the online service, it is required to extract the frontend url:</p>
+</div>
+<div class="listingblock lines_space console-input">
 <div class="content">
-<pre>TODO add fornt image</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get route dstrategies-frontend -n %USER%-blue-green -o jsonpath='{.spec.host}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying in your screen:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-blue-green.png" alt="Frontend Interface">
+</div>
+<div class="title">Figure 2. Frontend Interface</div>
+</div>
+<div class="paragraph">
+<p>In addition, regarding testing the offline service, it is required to get the Offline route and check the version is <strong>V2.0.0</strong>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">curl "$(oc get routes dstrategies-back-offline -n %USER%-blue-green --template='http://{{.spec.host}}')/dstrategies-back"
+{"metadata":{"version":"V2.0.0","colour":"Blue"}}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -485,7 +561,7 @@ If this dependency is for example a production DB we will create the things that
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">kubectl argo rollouts promote dstrategies-back -n %USER%-blue-green</code></pre>
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">oc argo rollouts promote dstrategies-back -n %USER%-blue-green</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -493,7 +569,8 @@ If this dependency is for example a production DB we will create the things that
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">NAME                                  KIND         STATUS        AGE  INFO
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">oc argo rollouts get rollout dstrategies-back --watch -n %USER%-blue-green
+NAME                                  KIND         STATUS        AGE  INFO
 ⟳ dstrategies-back                            Rollout      ✔ Healthy     88m
 ├──# revision:2
 │  ├──⧉ dstrategies-back-9dc6f576f            ReplicaSet   ✔ Healthy     62m  stable,active
@@ -519,7 +596,8 @@ If this dependency is for example a production DB we will create the things that
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input"> NAME                                 KIND         STATUS        AGE  INFO
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">oc argo rollouts get rollout dstrategies-back --watch -n %USER%-blue-green
+ NAME                                 KIND         STATUS        AGE  INFO
 ⟳ dstrategies-back                           Rollout      ✔ Healthy     89m
 ├──# revision:2
 │  ├──⧉ dstrategies-back-9dc6f576f           ReplicaSet   ✔ Healthy     62m  stable,active
@@ -539,7 +617,21 @@ If this dependency is for example a production DB we will create the things that
 </div>
 </div>
 <div class="paragraph">
-<p>TODO add front image</p>
+<p>In order to test the new online service, it is required to extract the frontend url:</p>
+</div>
+<div class="listingblock lines_space console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get route dstrategies-frontend -n %USER%-blue-green -o jsonpath='{.spec.host}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying in your screen:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-blue-green-v2.png" alt="Frontend Interface V2.0.0">
+</div>
+<div class="title">Figure 3. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p><strong>We have in the online environment the new version V2.0.0!!!</strong></p>
@@ -571,24 +663,53 @@ git push</code></pre>
 <img src="_images/rollout-blue-green-step-rollback-initial.png" alt="Dstrategies Step Rollback initial">
 </div>
 </div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">oc argo rollouts get rollout dstrategies-back --watch -n %USER%-blue-green
+NAME                                          KIND         STATUS        AGE   INFO
+⟳ dstrategies-back                            Rollout      ॥ Paused      34m
+├──# revision:3
+│  ├──⧉ dstrategies-back-9d7b5bb4c            ReplicaSet   ✔ Healthy     34m   preview
+│  │  └──□ dstrategies-back-9d7b5bb4c-8twhx   Pod          ✔ Running     101s  ready:1/1
+│  └──α dstrategies-back-9d7b5bb4c-3-pre      AnalysisRun  ✔ Successful  70s   ✔ 1
+└──# revision:2
+   ├──⧉ dstrategies-back-7fcdfb7748           ReplicaSet   ✔ Healthy     11m   stable,active
+   │  └──□ dstrategies-back-7fcdfb7748-lcldp  Pod          ✔ Running     11m   ready:1/1
+   └──α dstrategies-back-7fcdfb7748-2-pre     AnalysisRun  ✔ Successful  11m   ✔ 1</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Execute this command to promote dstrategies-back to version <code>V1.0.0</code>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">kubectl argo rollouts promote dstrategies-back -n %USER%-blue-green</code></pre>
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">oc argo rollouts promote dstrategies-back -n %USER%-blue-green</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>The rollback is done!</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/rollout-blue-green-step-rollback.png" alt="Dstrategies Step Rollback">
+<img src="_images/rollout-blue-green-step-rollback.png" alt="DStrategies Step Rollback">
 </div>
 </div>
 <div class="paragraph">
-<p>TODO add front image</p>
+<p>In order to test the online service, it is required to extract the frontend url:</p>
+</div>
+<div class="listingblock lines_space console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get route dstrategies-frontend -n %USER%-blue-green -o jsonpath='{.spec.host}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying in your screen:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-blue-green-v1.png" alt="Frontend Interface V1.0.0">
+</div>
+<div class="title">Figure 4. Frontend Interface</div>
+</div>
+<div class="paragraph">
+<p>The rollback is done!</p>
 </div>
 </div>
 </div>
