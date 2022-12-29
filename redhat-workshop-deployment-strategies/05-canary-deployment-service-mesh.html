@@ -189,7 +189,7 @@
 <p>To achieve the right percentage in each version, we are going to use traffic management with <strong>Openshift Service Mesh</strong></p>
 </div>
 <div class="paragraph">
-<p>We also have a huge improvement. The back application is sending metrics to Prometheus. We will use those metrics to decide if <strong>Argo Rollouts</strong> keep increasing the amount of traffic, that goes to the new version, or cancel the rollout.</p>
+<p>Moreover, we have another huge improvement. The back application is sending metrics to Prometheus. We will configure <strong>Argo Rollouts</strong> to use those metrics to decide if keep increasing the amount of traffic, that goes to the new version, or cancel the rollout.</p>
 </div>
 <div class="paragraph">
 <p>To get progressive delivery based on the Prometheus metrics. We have an AnalisisTemplate that fetches the metrics and decide if go on or cancel the rollout.</p>
@@ -236,22 +236,27 @@
 </div>
 </div>
 <div class="sect2">
-<h3 id="_modify_back_service_url"><a class="anchor" href="#_modify_back_service_url"></a>Modify back service URL</h3>
+<h3 id="_modify_helm_values"><a class="anchor" href="#_modify_helm_values"></a>Modify Helm values</h3>
 <div class="paragraph">
-<p>TODO is it neccesary or with helm we can get the REACT_APP_BACK
-Finally, it is required to create a <strong>Deployment</strong> object to deploy the frontend application. This application helps us to test the canary rollout strategy from a web interface and see backend information.</p>
+<p>Finally, it is required to create a <strong>Deployment</strong> object to deploy the frontend application. This application helps us to test the canary rollout strategy from a web interface and see backend information.</p>
 </div>
 <div class="paragraph">
-<p>To allow communication between the frontend and the backend, it is required to edit the file named <strong>./rhsm-canary/dstrategies-frontend-deployment.yaml</strong> to add the required <strong>&lt;USERNAME&gt;</strong> and <strong>&lt;OCP_APPS_DOMAIN&gt;</strong>.</p>
+<p>To allow communication between the frontend and the backend, it is required to edit the file named <strong>./rhsm-canary/edit.values.yaml</strong> to add the required <strong>&lt;OCP_APPS_DOMAIN&gt;</strong>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">        env:
-          - name: REACT_APP_BACK
-            value: <a href="http://dstrategies-back-online-&lt;USERNAME&gt;-canary.&lt;OCP_APPS_DOMAIN&gt;/dstrategies-back" class="bare">http://dstrategies-back-online-&lt;USERNAME&gt;-canary.&lt;OCP_APPS_DOMAIN&gt;/dstrategies-back</a>
-          - name: REACT_APP_CATEGORY
-            value: CANARY</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">service:
+  image:
+    version: V1.0.0
+domain: &lt;OCP_APPS_DOMAIN&gt;</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_obtain_red_hat_service_mesh_prometheus_password"><a class="anchor" href="#_obtain_red_hat_service_mesh_prometheus_password"></a>Obtain Red Hat Service Mesh Prometheus Password</h3>
+<div class="paragraph">
+<p>TODO
+&lt;PROMETHEUS-PASSWORD&gt;</p>
 </div>
 </div>
 <div class="sect2">
@@ -262,7 +267,7 @@ Finally, it is required to create a <strong>Deployment</strong> object to deploy
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">git add .
-git commit -m "Configured DStrategies App deployment files for canary strategy"
+git commit -m "Configured DStrategies App deployment files for canary with Service Mesh strategy"
 git push</code></pre>
 </div>
 </div>
@@ -280,7 +285,7 @@ git push</code></pre>
 <pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dstrategies-canary-rhsm
+  name: dstrategies-canary-service-mesh
   namespace: %USER%-gitops-argocd
 spec:
   destination:
@@ -293,7 +298,7 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-        - test.values.yaml
+        - edit.values.yaml
   project: default
   syncPolicy:
     automated:
@@ -319,14 +324,15 @@ image::argocd_dstrategies-canary.png["ArgoCD Dstrategies"]</p>
 <h2 id="_application_architecture"><a class="anchor" href="#_application_architecture"></a>Application architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To achieve canary deployment with <strong>Cloud Native</strong> applications using <strong>Argo Rollouts</strong>, we have designed this architecture.</p>
+<p>To achieve canary deployment with <strong>Cloud Native</strong> applications using <strong>Argo Rollouts</strong> and <strong>Openshift Service Mesh</strong>, we have designed this architecture.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-service-mesh-rollout-step-0.png" alt="Dstrategies initial status">
+</div>
 </div>
 <div class="paragraph">
-<p>TODO
-image::canary-rollout-step-0.png["Dstrategies initial status"]</p>
-</div>
-<div class="paragraph">
-<p>OpenShift Components - Online
+<p>OpenShift Components
 TODO
 - Routes and Services declared with the suffix -online
 - Routes mapped only to the online services
@@ -356,7 +362,7 @@ TODO
 </div>
 </div>
 <div class="paragraph">
-<p>We have defined an active or online service 'dstrategies-back-online'. Final user will always use 'dstrategies-back-online'. When a new version is deployed <strong>Argo Rollouts</strong> create a new revision (ReplicaSet). The number of replicas in the new release increases based on the information in the steps, and the number of replicas in the old release decreases by the same number.</p>
+<p>We have defined an active service 'dstrategies-back'. Final user will always use 'dstrategies-back'. When a new version is deployed <strong>Argo Rollouts</strong> create a new revision (ReplicaSet). The number of replicas in the new release increases based on the information in the steps, and the number of replicas in the old release decreases by the same number. But in this case the amount of traffic that is send to each version will be managed by the VirtualService.</p>
 </div>
 </div>
 </div>
@@ -367,16 +373,16 @@ TODO
 <p>We have deployed the <strong>dstrategies</strong> with ArgoCD. We can test that it is up and running.</p>
 </div>
 <div class="paragraph">
-<p>TODO
-To test the online service, you can use the frontend <a href="http://dstrategies-frontend-%USER%-canary-service-mesh.apps.%CLUSTER%/">URL</a></p>
+<p>To test the service, you can use the frontend <a href="https://dstrategies-frontend-%USER%-canary-service-mesh-istio-system.apps.%CLUSTER%/">URL</a></p>
 </div>
 <div class="paragraph">
 <p>Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying on your screen:</p>
 </div>
-<div class="paragraph">
-<p>TODO
-.Frontend Interface
-image::frontend-canary.png["Frontend Interface"]</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-canary-service-mesh.png" alt="Frontend Interface">
+</div>
+<div class="title">Figure 1. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p>Notice that in each microservice response we have added metadata information to see better the <strong>version</strong> of each application. This will help us to see the changes while we do the canary deployment.  We can see that the current version is <strong>V1.0.0</strong>.</p>
@@ -400,22 +406,22 @@ image::frontend-canary.png["Frontend Interface"]</p>
 </div>
 </div>
 <div class="paragraph console-input">
-<p>Before applying these changes, it is important to monitor the current version via the frontend. To track all canary processes, it is required to prepare the frontend to generate multiple requests. <strong>If do not have multiple requests the back application will not generate traffic and the rollout will fail</strong>.</p>
+<p>Before applying these changes, it is important to monitor the current version via the frontend. To track all canary processes, it is required to prepare the frontend to generate multiple requests. <strong>If do not have multiple requests the back application will not generate traffic and the rollout will fail</strong>. Remember that we are using the metrics to decide if we go on with the rollout or not. Without traffic we don&#8217;t have metrics.</p>
 </div>
 <div class="paragraph">
-<p>TODO
-To test the online service, you can use the frontend <a href="http://dstrategies-frontend-%USER%-canary-service-mesh.apps.%CLUSTER%/">URL</a></p>
+<p>To test the service, you can use the frontend <a href="https://dstrategies-frontend-%USER%-canary-service-mesh-istio-system.apps.%CLUSTER%/">URL</a></p>
 </div>
 <div class="paragraph">
 <p>Visit the frontend route via your web browser, edit the number of <strong>Calls Retries</strong> to 10000 and push - JUMP- button and ensure the following message is displaying on your screen:</p>
 </div>
-<div class="paragraph">
-<p>TODO
-.Frontend Interface
-image::frontend-canary-v1.png["Frontend Interface"]</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="frontend-canary-service-mesh-v1.png" alt="Frontend Interface">
+</div>
+<div class="title">Figure 2. Frontend Interface</div>
 </div>
 <div class="paragraph">
-<p><strong>Argo Rollouts</strong> will automatically deploy a new dstrategies-back revision. Based on the steps that you have defined we will see how the traffic will go to the different versions.</p>
+<p><strong>Argo Rollouts</strong> will automatically deploy a new dstrategies-back revision. Based on the steps that you have defined, we will see how the traffic will go to the different versions.</p>
 </div>
 <div class="paragraph">
 <p>We also encourage you to use <a href="https://kiali-istio-system.apps.%CLUSTER%/">Kiali</a> graph to see the percentages of the traffic that goes to each version.</p>
@@ -440,9 +446,10 @@ image::argocd-Dstrategies-canary-Refresh.png["Refresh Dstrategies"]</p>
 <div class="paragraph">
 <p>This is our current status:</p>
 </div>
-<div class="paragraph">
-<p>TODO
-image::canary-rollout-step-1.png["Dstrategies Step 1]</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-service-mesh-rollout-step-1.png" alt="&quot;Dstrategies Step 1">
+</div>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -472,7 +479,7 @@ image::canary-rollout-step-1.png["Dstrategies Step 1]</p>
 <div class="paragraph">
 <p>TODO
 .Frontend Interface
-image::frontend-canary-v2.png["Frontend Interface"]</p>
+image::frontend-canary-service-mesh-v2.png["Frontend Interface"]</p>
 </div>
 <div class="paragraph">
 <p>Old revision:</p>
@@ -480,13 +487,18 @@ image::frontend-canary-v2.png["Frontend Interface"]</p>
 <div class="paragraph">
 <p>TODO
 .Frontend Interface
-image::frontend-canary-v1.png["Frontend Interface"]</p>
+image::frontend-canary-service-mesh-v1.png["Frontend Interface"]</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_deploy_dstrategies_back_new_version_rollout_finished"><a class="anchor" href="#_deploy_dstrategies_back_new_version_rollout_finished"></a>Deploy dstrategies-back new version rollout finished</h3>
 <div class="paragraph">
-<p>When all the rollout steps have finished. <strong>We have in the online environment the new version V2.0.0!!!</strong></p>
+<p>When all the rollout steps have finished. <strong>We have the new version V2.0.0 for all the users!!!</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-service-mesh-rollout-step-2.png" alt="Dstrategies Step Rollback">
+</div>
 </div>
 <div class="paragraph">
 <p>New revision:</p>
@@ -494,7 +506,7 @@ image::frontend-canary-v1.png["Frontend Interface"]</p>
 <div class="paragraph">
 <p>TODO
 .Frontend Interface
-image::frontend-canary-v2.png["Frontend Interface"]</p>
+image::frontend-canary-service-mesh-v2.png["Frontend Interface"]</p>
 </div>
 </div>
 <div class="sect2">
@@ -554,21 +566,22 @@ git push</code></pre>
 <div class="paragraph">
 <p>The rollback is done!</p>
 </div>
-<div class="paragraph">
-<p>TODO
-image::canary-rollout-step-Rollback.png["Dstrategies Step Rollback"]</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-service-mesh-rollout-step-rollback.png" alt="Dstrategies Step Rollback">
+</div>
 </div>
 <div class="paragraph">
-<p>TODO
-To test the online service, you can use the frontend <a href="http://dstrategies-frontend-%USER%-canary-service-mesh.apps.%CLUSTER%/">URL</a></p>
+<p>To test the  service, you can use the frontend <a href="https://dstrategies-frontend-%USER%-canary-service-mesh-istio-system.apps.%CLUSTER%/">URL</a></p>
 </div>
 <div class="paragraph">
 <p>Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying on your screen:</p>
 </div>
-<div class="paragraph">
-<p>TODO
-.Frontend Interface
-image::frontend-canary.png["Frontend Interface"]</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-canary-service-mesh.png" alt="Frontend Interface">
+</div>
+<div class="title">Figure 3. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p>To get the application ready for a new release we should configure again the  <strong>Argo Rollouts</strong> with the steps.</p>
