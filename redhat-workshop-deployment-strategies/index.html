@@ -98,6 +98,9 @@
   </li>
 </ul>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#01-clusterSetup">1.3 Cluster Setup</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -137,10 +140,106 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="03-blue-green-deployment.html">3. Blue/Green deployment strategy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-arch">3.1 Application architecture</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-blue-green-deployment.html#03-dmodel">3.2 Generate DStrategies APP GitOps Deployment Model</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-reviewsvc">3.2.1 Review Services</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-rollout">3.2.2 Modify Rollout strategy</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-anatemp">3.2.3 Modify Analysis Template</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-backurl">3.2.4 Modify back service URL</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-commit">3.2.5 Commit and Push the Changes</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-argo">3.3 Argo CD Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-test">3.4 Test Dstrategies application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-blue-green-deployment.html#03-deploy">3.5 DStrategies-back Blue/Green deployment</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-step1">3.5.1 Step 1 - Deploy a new version</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-step2">3.5.2 Step 2 - Promote a new version</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-blue-green-deployment.html#03-rollback">3.5.3 Rollback</a>
+  </li>
+</ul>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="04-canary-deployment.html">4. Canary deployment strategy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-canary-deployment.html#04-arch">4.1 Generate DStrategies APP GitOps Deployment Model</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-canary-deployment.html#04-review">4.1.1 Review and Modify Rollout strategy</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-canary-deployment.html#04-mod">4.1.2 Modify Analysis Template</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-canary-deployment.html#04-url">4.1.3 Modify back service URL</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-canary-deployment.html#04-git">4.1.4 Commit and Push the Changes</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-canary-deployment.html#04-delpoy">4.2 Deploy Dstrategies Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-canary-deployment.html#04-app">4.3 Application architecture</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-canary-deployment.html#04-test">4.4 Test Dstrategies application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-canary-deployment.html#04-canary">4.5 Dstrategies-back canary deployment</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-canary-deployment.html#04-step1">4.5.1 Step 1 - Deploy the canary version for 10%</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-canary-deployment.html#04-step2">4.5.2 Step 2 - Scale the canary version to 50%</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-canary-deployment.html#04-step3">4.5.3 Step 3 - Scale the canary version to 100%</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-canary-deployment.html#04-rollback">4.5.4 Rollback</a>
+  </li>
+</ul>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
