@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Canary deployment strategy with service mesh :: RHTE Workshop - Deployment Strategies with Argo CD and Argo Rollouts</title>
+    <title>Canary deployment strategy with Openshift Service Mesh :: RHTE Workshop - Deployment Strategies with Argo CD and Argo Rollouts</title>
     <link rel="canonical" href="https://github.com/rhte2023-argo-rollouts/redhat-workshop-deployment-strategies/redhat-workshop-deployment-strategies/05-canary-deployment-service-mesh.html">
+    <link rel="prev" href="04-canary-deployment.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -240,6 +241,48 @@
   </li>
 </ul>
   </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-canary-deployment-service-mesh.html">5. Canary deployment strategy with Service Mesh</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#05-arch">5.1 Generate DStrategies APP GitOps Deployment Model</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#05-review">5.1.1 Review and Modify Rollout strategy</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#05-helm">5.1.2 Modify Helm values</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#05-prometheus">5.1.3 Obtain Red Hat Service Mesh Prometheus Password</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#05-git">5.1.4 Commit and Push the Changes</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#05-deploy">5.2 Deploy Dstrategies Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#05-app">5.3 Application architecture</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#05-test">5.4 Test Dstrategies application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#05-canary">5.5 Dstrategies-back canary deployment</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#05-rollback">5.5.1 Rollback</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
 </ul>
@@ -271,14 +314,14 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Workshop</a></li>
-    <li><a href="05-canary-deployment-service-mesh.html">Canary deployment strategy with service mesh</a></li>
+    <li><a href="05-canary-deployment-service-mesh.html">5. Canary deployment strategy with Service Mesh</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/rhte2023-argo-rollouts/redhat-workshop-deployment-strategies/edit/master/documentation/modules/ROOT/pages/05-canary-deployment-service-mesh.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Canary deployment strategy with service mesh</h1>
+<h1 class="page">Canary deployment strategy with Openshift Service Mesh</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -311,7 +354,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_generate_dstrategies_app_gitops_deployment_model"><a class="anchor" href="#_generate_dstrategies_app_gitops_deployment_model"></a>Generate DStrategies APP GitOps Deployment Model</h2>
+<h2 id="05-arch"><a class="anchor" href="#05-arch"></a>Generate DStrategies APP GitOps Deployment Model</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>First of all, it is required to review a set of objects in our forked git repository to configure the deployment correctly for deploying our application following a GitOps model.</p>
@@ -320,7 +363,7 @@
 <p>For this exercise, we are going to use Helm to render the different Kubernetes objects. Please follow the next section to understand the required objects and configurations.</p>
 </div>
 <div class="sect2">
-<h3 id="_review_and_modify_rollout_strategy"><a class="anchor" href="#_review_and_modify_rollout_strategy"></a>Review and Modify Rollout strategy</h3>
+<h3 id="05-review"><a class="anchor" href="#05-review"></a>Review and Modify Rollout strategy</h3>
 <div class="paragraph">
 <p>We want that you define the steps to perform the canary deployment. You can choose the number of the steps and the percentage of traffic. To learn more about <strong>Argo Rollouts</strong>, please read <a href="https://argoproj.github.io/argo-rollouts/features/canary/">this</a>.</p>
 </div>
@@ -347,7 +390,7 @@
 </div>
 </div>
 <div class="sect2">
-<h3 id="_modify_helm_values"><a class="anchor" href="#_modify_helm_values"></a>Modify Helm values</h3>
+<h3 id="05-helm"><a class="anchor" href="#05-helm"></a>Modify Helm values</h3>
 <div class="paragraph">
 <p>Finally, it is required to create a <strong>Deployment</strong> object to deploy the frontend application. This application helps us to test the canary rollout strategy from a web interface and see backend information.</p>
 </div>
@@ -364,7 +407,7 @@ domain: &lt;OCP_APPS_DOMAIN&gt;</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_obtain_red_hat_service_mesh_prometheus_password"><a class="anchor" href="#_obtain_red_hat_service_mesh_prometheus_password"></a>Obtain Red Hat Service Mesh Prometheus Password</h3>
+<h3 id="05-prometheus"><a class="anchor" href="#05-prometheus"></a>Obtain Red Hat Service Mesh Prometheus Password</h3>
 <div class="paragraph">
 <p>To get Service Mesh Prometheus password, review the parameters table provided by the instructor. Then it is required to edit the file named <strong>./rhsm-canary/templates/dstrategies-back-analysis-template.yaml</strong> to add the required <strong>&lt;PROMETHEUS-PASSWORD&gt;</strong>.</p>
 </div>
@@ -377,7 +420,7 @@ domain: &lt;OCP_APPS_DOMAIN&gt;</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_commit_and_push_the_changes"><a class="anchor" href="#_commit_and_push_the_changes"></a>Commit and Push the Changes</h3>
+<h3 id="05-git"><a class="anchor" href="#05-git"></a>Commit and Push the Changes</h3>
 <div class="paragraph">
 <p>Once all the files are configured correctly, it is time to commit and push all changes to the repository that you have just forked.</p>
 </div>
@@ -392,7 +435,7 @@ git push</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_deploy_dstrategies_application"><a class="anchor" href="#_deploy_dstrategies_application"></a>Deploy Dstrategies Application</h2>
+<h2 id="05-deploy"><a class="anchor" href="#05-deploy"></a>Deploy Dstrategies Application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We are going to create the application <strong>dstrategies</strong>, which we will use to test canary deployment with Service Mesh. Because we will make changes in the application&#8217;s GitHub repository, we have to use the repository that you have just forked. Please edit the following yaml and set your own GitHub repository in the <strong>reportURL</strong>. Create a file called <strong>application-dstrategies-canary-rhsm.yaml</strong></p>
@@ -439,7 +482,7 @@ spec:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_application_architecture"><a class="anchor" href="#_application_architecture"></a>Application architecture</h2>
+<h2 id="05-app"><a class="anchor" href="#05-app"></a>Application architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To achieve canary deployment with <strong>Cloud Native</strong> applications using <strong>Argo Rollouts</strong> and <strong>Openshift Service Mesh</strong>, we have designed this architecture.</p>
@@ -485,7 +528,7 @@ TODO
 </div>
 </div>
 <div class="sect1">
-<h2 id="_test_dstrategies_application"><a class="anchor" href="#_test_dstrategies_application"></a>Test Dstrategies application</h2>
+<h2 id="05-test"><a class="anchor" href="#05-test"></a>Test Dstrategies application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We have deployed the <strong>dstrategies</strong> with ArgoCD. We can test that it is up and running.</p>
@@ -529,13 +572,11 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 </div>
 </div>
 <div class="sect1">
-<h2 id="_dstrategies_back_canary_deployment"><a class="anchor" href="#_dstrategies_back_canary_deployment"></a>Dstrategies-back canary deployment</h2>
+<h2 id="05-canary"><a class="anchor" href="#05-canary"></a>Dstrategies-back canary deployment</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To test canary deployment we are going to do changes in the backend application dstrategies-back.</p>
 </div>
-<div class="sect2">
-<h3 id="_deploy_dstrategies_back_new_version"><a class="anchor" href="#_deploy_dstrategies_back_new_version"></a>Deploy dstrategies-back new version</h3>
 <div class="paragraph">
 <p>We will deploy a new version <strong>V2.0.0</strong>.</p>
 </div>
@@ -564,7 +605,7 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 <div class="title">Figure 4. Kiali namespace</div>
 </div>
 <div class="paragraph">
-<p>Then go to 'Show Edge Labels' and select 'Requests Percentage'.</p>
+<p>Then go to <em>Display</em>, <em>Show Edge Labels</em> and select <em>Requests Percentage</em>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -659,7 +700,6 @@ git push</code></pre>
 </div>
 <div class="title">Figure 9. Kiali graph V2</div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_deploy_dstrategies_back_new_version_rollout_finished"><a class="anchor" href="#_deploy_dstrategies_back_new_version_rollout_finished"></a>Deploy dstrategies-back new version rollout finished</h3>
 <div class="paragraph">
@@ -681,7 +721,7 @@ git push</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_rollback"><a class="anchor" href="#_rollback"></a>Rollback</h3>
+<h3 id="05-rollback"><a class="anchor" href="#05-rollback"></a>Rollback</h3>
 <div class="paragraph">
 <p>Imagine that something goes wrong, we know that this never happens but just in case. We can do a very <strong>quick rollback</strong> just by undoing the change.</p>
 </div>
@@ -760,6 +800,9 @@ git push</code></pre>
 </div>
 </div>
 </div>
+<nav class="pagination">
+  <span class="prev"><a href="04-canary-deployment.html" class="query-params-link">4. Canary deployment strategy</a></span>
+</nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
