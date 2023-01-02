@@ -537,14 +537,9 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 <div class="sect2">
 <h3 id="_deploy_dstrategies_back_new_version"><a class="anchor" href="#_deploy_dstrategies_back_new_version"></a>Deploy dstrategies-back new version</h3>
 <div class="paragraph">
-<p>We will deploy a new version <strong>V2.0.0</strong>. To do it, we have to edit the files <strong>./rhsm-canary/edit.values.yaml</strong> to modify the value <strong>v1.0.0</strong> to <strong>V2.0.0</strong>:</p>
+<p>We will deploy a new version <strong>V2.0.0</strong>.</p>
 </div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">    version: V2.0.0' &lt;---</code></pre>
-</div>
-</div>
-<div class="paragraph console-input">
+<div class="paragraph">
 <p>Before applying these changes, it is important to monitor the current version via the frontend. To track all canary processes, it is required to prepare the frontend to generate multiple requests. <strong>If do not have multiple requests the back application will not generate traffic and the rollout will fail</strong>. Remember that we are using the metrics to decide if we go on with the rollout or not. Without traffic we don&#8217;t have metrics.</p>
 </div>
 <div class="paragraph">
@@ -578,7 +573,7 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 <div class="title">Figure 5. Kiali labels</div>
 </div>
 <div class="paragraph">
-<p>We will see the dstrategies graph:</p>
+<p>We will see the dstrategies graph with 100% of the traffic going to V1.0.0</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -587,6 +582,14 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 <div class="title">Figure 6. Kiali graph V1</div>
 </div>
 <div class="paragraph">
+<p>We have to edit the files <strong>./rhsm-canary/edit.values.yaml</strong> to modify the value <strong>v1.0.0</strong> to <strong>V2.0.0</strong>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">    version: V2.0.0' &lt;---</code></pre>
+</div>
+</div>
+<div class="paragraph console-input">
 <p>When you are ready to see all the changes on the fly. Push the changes to start the deployment.</p>
 </div>
 <div class="listingblock console-input">
@@ -600,11 +603,7 @@ git push</code></pre>
 <p>ArgoCD will refresh the status after some minutes. If you don&#8217;t want to wait you can refresh it manually from ArgoCD UI.</p>
 </div>
 <div class="paragraph">
-<p>TODO
-image::argocd-Dstrategies-canary-Refresh.png["Refresh Dstrategies"]</p>
-</div>
-<div class="paragraph">
-<p>This is our current status:</p>
+<p>This is our current status (It can be different depending on the steps you have defined)):</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -636,18 +635,29 @@ image::argocd-Dstrategies-canary-Refresh.png["Refresh Dstrategies"]</p>
 <div class="paragraph">
 <p>New revision:</p>
 </div>
-<div class="paragraph">
-<p>TODO
-.Frontend Interface
-image::frontend-canary-service-mesh-v2.png["Frontend Interface"]</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-canary-service-mesh-v2.png" alt="Frontend Interface">
+</div>
+<div class="title">Figure 7. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p>Old revision:</p>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-canary-service-mesh.png" alt="Frontend Interface">
+</div>
+<div class="title">Figure 8. Frontend Interface</div>
+</div>
 <div class="paragraph">
-<p>TODO
-.Frontend Interface
-image::frontend-canary-service-mesh-v1.png["Frontend Interface"]</p>
+<p>In Kiali, you can also see how the traffic going to each version changes.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/kiali-graph-v2.png" alt="&quot;Kiali graph V2">
+</div>
+<div class="title">Figure 9. Kiali graph V2</div>
 </div>
 </div>
 <div class="sect2">
@@ -663,10 +673,11 @@ image::frontend-canary-service-mesh-v1.png["Frontend Interface"]</p>
 <div class="paragraph">
 <p>New revision:</p>
 </div>
-<div class="paragraph">
-<p>TODO
-.Frontend Interface
-image::frontend-canary-service-mesh-v2.png["Frontend Interface"]</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/frontend-canary-service-mesh-v2.png" alt="Frontend Interface">
+</div>
+<div class="title">Figure 10. Frontend Interface</div>
 </div>
 </div>
 <div class="sect2">
@@ -741,7 +752,7 @@ git push</code></pre>
 <div class="content">
 <img src="_images/frontend-canary-service-mesh.png" alt="Frontend Interface">
 </div>
-<div class="title">Figure 7. Frontend Interface</div>
+<div class="title">Figure 11. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p>To get the application ready for a new release we should configure again the  <strong>Argo Rollouts</strong> with the steps.</p>
