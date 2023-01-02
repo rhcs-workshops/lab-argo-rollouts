@@ -537,7 +537,7 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 <div class="sect2">
 <h3 id="_deploy_dstrategies_back_new_version"><a class="anchor" href="#_deploy_dstrategies_back_new_version"></a>Deploy dstrategies-back new version</h3>
 <div class="paragraph">
-<p>We will deploy a new version <strong>V2.0.0</strong>. To do it, we have to edit the files <strong>./rhsm-canary/test.values.yaml</strong> to modify the value <strong>v1.0.0</strong> to <strong>V2.0.0</strong>:</p>
+<p>We will deploy a new version <strong>V2.0.0</strong>. To do it, we have to edit the files <strong>./rhsm-canary/edit.values.yaml</strong> to modify the value <strong>v1.0.0</strong> to <strong>V2.0.0</strong>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -548,14 +548,11 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 <p>Before applying these changes, it is important to monitor the current version via the frontend. To track all canary processes, it is required to prepare the frontend to generate multiple requests. <strong>If do not have multiple requests the back application will not generate traffic and the rollout will fail</strong>. Remember that we are using the metrics to decide if we go on with the rollout or not. Without traffic we don&#8217;t have metrics.</p>
 </div>
 <div class="paragraph">
-<p>To test the service, you can use the frontend <a href="https://dstrategies-frontend-%USER%-canary-service-mesh-istio-system.apps.%CLUSTER%/">URL</a></p>
-</div>
-<div class="paragraph">
 <p>Visit the frontend route via your web browser, edit the number of <strong>Calls Retries</strong> to 10000 and push - JUMP- button and ensure the following message is displaying on your screen:</p>
 </div>
-<div class="imageblock unresolved">
+<div class="imageblock">
 <div class="content">
-<img src="frontend-canary-service-mesh-v1.png" alt="Frontend Interface">
+<img src="_images/frontend-canary-service-mesh-retries.png" alt="Frontend Interface">
 </div>
 <div class="title">Figure 3. Frontend Interface</div>
 </div>
@@ -563,7 +560,31 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 <p><strong>Argo Rollouts</strong> will automatically deploy a new dstrategies-back revision. Based on the steps that you have defined, we will see how the traffic will go to the different versions.</p>
 </div>
 <div class="paragraph">
-<p>We also encourage you to use <a href="https://kiali-istio-system.apps.%CLUSTER%/">Kiali</a> graph to see the percentages of the traffic that goes to each version.</p>
+<p>We also encourage you to use <a href="https://kiali-istio-system.apps.%CLUSTER%/">Kiali</a> graph to see the percentages of the traffic that goes to each version. Log in with your Openshift lab-user and select you namespace.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/kiali-namespace.png" alt="&quot;Kiali namespace">
+</div>
+<div class="title">Figure 4. Kiali namespace</div>
+</div>
+<div class="paragraph">
+<p>Then go to 'Show Edge Labels' and select 'Requests Percentage'.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/kiali-labels.png" alt="&quot;Kiali labels">
+</div>
+<div class="title">Figure 5. Kiali labels</div>
+</div>
+<div class="paragraph">
+<p>We will see the dstrategies graph:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/kiali-graph-v1.png" alt="&quot;Kiali graph V1">
+</div>
+<div class="title">Figure 6. Kiali graph V1</div>
 </div>
 <div class="paragraph">
 <p>When you are ready to see all the changes on the fly. Push the changes to start the deployment.</p>
@@ -720,7 +741,7 @@ git push</code></pre>
 <div class="content">
 <img src="_images/frontend-canary-service-mesh.png" alt="Frontend Interface">
 </div>
-<div class="title">Figure 4. Frontend Interface</div>
+<div class="title">Figure 7. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p>To get the application ready for a new release we should configure again the  <strong>Argo Rollouts</strong> with the steps.</p>
