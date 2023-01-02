@@ -291,10 +291,22 @@
 <p>Moreover, we have another huge improvement. The back application is sending metrics to Prometheus. We will configure <strong>Argo Rollouts</strong> to use those metrics to decide if keep increasing the amount of traffic, that goes to the new version, or cancel the rollout.</p>
 </div>
 <div class="paragraph">
-<p>To get progressive delivery based on the Prometheus metrics. We have an AnalisisTemplate that fetches the metrics and decide if go on or cancel the rollout.</p>
+<p>To get progressive delivery based on the Prometheus metrics. We have an AnalysisTemplate that fetches the metrics and decide if go on or cancel the rollout.</p>
 </div>
-<div class="paragraph">
-<p>TODO show AnalisisTemplate content</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  metrics:
+  - name: {{ include "service.name" . }}-prometheus-metric
+    interval: 10s
+    successCondition: len(result) == 0 || result[0] &gt;= 0.95
+    failureLimit: 2
+    provider:
+      prometheus:
+        address: <a href="https://internal:&lt;PROMETHEUS-PASSWORD&gt;@prometheus.istio-system.svc.cluster.local:9090" class="bare">https://internal:&lt;PROMETHEUS-PASSWORD&gt;@prometheus.istio-system.svc.cluster.local:9090</a>
+        query: |
+                    sum(irate( istio_requests_total{reporter="source",destination_service_name=~"dstrategies-back",response_code!~"5.*"}[30s] )) / sum(irate( istio_requests_total{reporter="source",destination_service_name=~"dstrategies-back"}[30s] ))</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -354,8 +366,14 @@ domain: &lt;OCP_APPS_DOMAIN&gt;</code></pre>
 <div class="sect2">
 <h3 id="_obtain_red_hat_service_mesh_prometheus_password"><a class="anchor" href="#_obtain_red_hat_service_mesh_prometheus_password"></a>Obtain Red Hat Service Mesh Prometheus Password</h3>
 <div class="paragraph">
-<p>TODO
-&lt;PROMETHEUS-PASSWORD&gt;</p>
+<p>To get Service Mesh Prometheus password, review the parameters table provided by the instructor. Then it is required to edit the file named <strong>./rhsm-canary/templates/dstrategies-back-analysis-template.yaml</strong> to add the required <strong>&lt;PROMETHEUS-PASSWORD&gt;</strong>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    provider:
+      prometheus:
+        address: <a href="https://internal:&lt;PROMETHEUS-PASSWORD&gt;@prometheus.istio-system.svc.cluster.local:9090" class="bare">https://internal:&lt;PROMETHEUS-PASSWORD&gt;@prometheus.istio-system.svc.cluster.local:9090</a></code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
