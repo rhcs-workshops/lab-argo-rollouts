@@ -325,7 +325,7 @@
 <p>We want that you define the steps to perform the canary deployment. You can choose the number of the steps and the percentage of traffic. To learn more about <strong>Argo Rollouts</strong>, please read <a href="https://argoproj.github.io/argo-rollouts/features/canary/">this</a>.</p>
 </div>
 <div class="paragraph">
-<p>Please edit a file named <strong>./rhsm-canary/template/dstrategies-back-rollout.yaml</strong> to define <strong>&lt;SET-STEPS&gt;</strong> as you want and understand the canary deployment strategy:</p>
+<p>Please edit a file named <strong>./rhsm-canary/templates/dstrategies-back-rollout.yaml</strong> to define <strong>&lt;SET-STEPS&gt;</strong> as you want and understand the canary deployment strategy:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -431,9 +431,10 @@ spec:
 <div class="paragraph">
 <p>Looking at the Argo CD dashboard, you would notice that we have a new <strong>dstrategies</strong> application.</p>
 </div>
-<div class="paragraph">
-<p>TODO
-image::argocd_dstrategies-canary.png["ArgoCD Dstrategies"]</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd_dstrategies-canary-service-mesh.png" alt="ArgoCD Dstrategies">
+</div>
 </div>
 </div>
 </div>
@@ -490,7 +491,28 @@ TODO
 <p>We have deployed the <strong>dstrategies</strong> with ArgoCD. We can test that it is up and running.</p>
 </div>
 <div class="paragraph">
-<p>To test the service, you can use the frontend <a href="https://dstrategies-frontend-%USER%-canary-service-mesh-istio-system.apps.%CLUSTER%/">URL</a></p>
+<p>Visit the back route via your web browser <a href="https://dstrategies-back-%USER%-canary-service-mesh-istio-system.apps.rollouts.sandbox1288.opentlc.com/">URL</a></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+It is required to accept <strong>self-signed certificates</strong> provided by Openshift
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/certs_warning.png" alt="certs warning" width="50%">
+</div>
+<div class="title">Figure 1. Openshift Self-signed Certificates Warning</div>
+</div>
+<div class="paragraph">
+<p>Then you can use the frontend <a href="https://dstrategies-frontend-%USER%-canary-service-mesh-istio-system.apps.%CLUSTER%/">URL</a></p>
 </div>
 <div class="paragraph">
 <p>Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying on your screen:</p>
@@ -499,7 +521,7 @@ TODO
 <div class="content">
 <img src="_images/frontend-canary-service-mesh.png" alt="Frontend Interface">
 </div>
-<div class="title">Figure 1. Frontend Interface</div>
+<div class="title">Figure 2. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p>Notice that in each microservice response we have added metadata information to see better the <strong>version</strong> of each application. This will help us to see the changes while we do the canary deployment.  We can see that the current version is <strong>V1.0.0</strong>.</p>
@@ -535,7 +557,7 @@ TODO
 <div class="content">
 <img src="frontend-canary-service-mesh-v1.png" alt="Frontend Interface">
 </div>
-<div class="title">Figure 2. Frontend Interface</div>
+<div class="title">Figure 3. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p><strong>Argo Rollouts</strong> will automatically deploy a new dstrategies-back revision. Based on the steps that you have defined, we will see how the traffic will go to the different versions.</p>
@@ -647,7 +669,7 @@ In our case the commit that we have done not only changes the ReplicaSet but als
 <p>If we just revert the changes in git we will go back to the previous version. But <strong>Argo Rollouts</strong> will take this revert as a new release so it will do it throw the steps that we have configured. We want a <strong>quick rollback</strong> we don&#8217;t want a step-by-step revert. To achieve the <strong>quick rollback</strong> we will configure <strong>Argo Rollouts</strong> without steps for the rollback.</p>
 </div>
 <div class="paragraph">
-<p>In the file <strong>./rhsm-canary/template/dstrategies-back-rollout.yaml</strong>  under the <strong>steps</strong> delete all the steps and only set one step <strong>- setWeight: 100</strong>:</p>
+<p>In the file <strong>./rhsm-canary/templates/dstrategies-back-rollout.yaml</strong>  under the <strong>steps</strong> delete all the steps and only set one step <strong>- setWeight: 100</strong>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -698,7 +720,7 @@ git push</code></pre>
 <div class="content">
 <img src="_images/frontend-canary-service-mesh.png" alt="Frontend Interface">
 </div>
-<div class="title">Figure 3. Frontend Interface</div>
+<div class="title">Figure 4. Frontend Interface</div>
 </div>
 <div class="paragraph">
 <p>To get the application ready for a new release we should configure again the  <strong>Argo Rollouts</strong> with the steps.</p>
