@@ -781,7 +781,7 @@ git push</code></pre>
 In our case the commit that we have done not only changes the ReplicaSet but also the ConfigMap. The <strong>undo</strong> command only changes the ReplicaSet, so it does not work for us.</p>
 </div>
 <div class="paragraph">
-<p>I recommend doing the changes in git. We will revert the last commit</p>
+<p>We recommend making  the changes in git. We will revert the last commit</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -792,7 +792,7 @@ In our case the commit that we have done not only changes the ReplicaSet but als
 <p>If we just revert the changes in git we will go back to the previous version. But <strong>Argo Rollouts</strong> will take this revert as a new release so it will do it throw the steps that we have configured. We want a <strong>quick rollback</strong> we don&#8217;t want a step-by-step revert. To achieve the <strong>quick rollback</strong> we will configure <strong>Argo Rollouts</strong> without steps for the rollback.</p>
 </div>
 <div class="paragraph">
-<p>In the file <strong>./canary/dstrategies-back-rollout.yaml</strong>  under <strong>dstrategies-back</strong> under the <strong>steps</strong> delete all the steps and only set one step <strong>- setWeight: 100</strong>:</p>
+<p>In the file <strong>./canary/dstrategies-back-rollout.yaml</strong>  under <strong>dstrategies-back</strong> under the <strong>steps</strong>, delete all the steps and only set one step <strong>- setWeight: 100</strong>:</p>
 </div>
 <div class="listingblock">
 <div class="content">

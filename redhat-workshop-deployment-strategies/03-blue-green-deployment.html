@@ -401,7 +401,7 @@
 <p>The Rollout object controls the application deployment. If you look closely, it is possible to find many similarities between an Argo Rollout object and a Kubernetes Deployment. The main difference between the previous objects referenced is the rollout strategy field.</p>
 </div>
 <div class="paragraph">
-<p>Please edit a file named <strong>./blue-green/dstrategies-back-rollout.yaml</strong> in oder to add the required <strong>&lt;SERVICE_OFFLINE&gt;</strong> and <strong>&lt;SERVICE_ONLINE&gt;</strong> service names:</p>
+<p>Please edit the file named <strong>./blue-green/dstrategies-back-rollout.yaml</strong> in oder to add the required <strong>&lt;SERVICE_OFFLINE&gt;</strong> and <strong>&lt;SERVICE_ONLINE&gt;</strong> service names:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -821,7 +821,7 @@ NAME                                  KIND         STATUS        AGE  INFO
 In our case the commit that we have done not only changes the ReplicaSet but also the ConfigMap. The <strong>undo</strong> command only changes the ReplicaSet, so it does not work for us.</p>
 </div>
 <div class="paragraph">
-<p>I recommend doing the changes in git. We will revert the last commit</p>
+<p>We recommend making  the changes in git. We will revert the last commit</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">

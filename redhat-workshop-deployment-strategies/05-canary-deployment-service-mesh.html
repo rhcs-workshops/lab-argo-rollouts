@@ -368,12 +368,16 @@
 <p>We want that you define the steps to perform the canary deployment. You can choose the number of the steps and the percentage of traffic. To learn more about <strong>Argo Rollouts</strong>, please read <a href="https://argoproj.github.io/argo-rollouts/features/canary/">this</a>.</p>
 </div>
 <div class="paragraph">
-<p>Please edit a file named <strong>./rhsm-canary/templates/dstrategies-back-rollout.yaml</strong> to define <strong>&lt;SET-STEPS&gt;</strong> as you want and understand the canary deployment strategy:</p>
+<p>Please edit the file named <strong>./rhsm-canary/templates/dstrategies-back-rollout.yaml</strong> to define <strong>&lt;SET-STEPS&gt;</strong> as you want and understand the canary deployment strategy:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  strategy:
     canary:
+      dynamicStableScale: true
+      analysis:
+        templates:
+        - templateName: {{ include "service.name" . }}-analysis-template
       trafficRouting:
         istio:
           virtualService:
@@ -392,7 +396,7 @@
 <div class="sect2">
 <h3 id="05-helm"><a class="anchor" href="#05-helm"></a>Modify Helm values</h3>
 <div class="paragraph">
-<p>Finally, it is required to create a <strong>Deployment</strong> object to deploy the frontend application. This application helps us to test the canary rollout strategy from a web interface and see backend information.</p>
+<p>It is required to create a <strong>Deployment</strong> object to deploy the frontend application. This application helps us to test the canary rollout strategy from a web interface and see backend information.</p>
 </div>
 <div class="paragraph">
 <p>To allow communication between the frontend and the backend, it is required to edit the file named <strong>./rhsm-canary/edit.values.yaml</strong> to add the required <strong>&lt;OCP_APPS_DOMAIN&gt;</strong>.</p>
@@ -409,7 +413,7 @@ domain: &lt;OCP_APPS_DOMAIN&gt;</code></pre>
 <div class="sect2">
 <h3 id="05-prometheus"><a class="anchor" href="#05-prometheus"></a>Obtain Red Hat Service Mesh Prometheus Password</h3>
 <div class="paragraph">
-<p>To get Service Mesh Prometheus password, review the parameters table provided by the instructor. Then it is required to edit the file named <strong>./rhsm-canary/templates/dstrategies-back-analysis-template.yaml</strong> to add the required <strong>&lt;PROMETHEUS-PASSWORD&gt;</strong>.</p>
+<p>Finally, we need the Service Mesh Prometheus password, to get it review the parameters table provided by the instructor. Then it is required to edit the file named <strong>./rhsm-canary/templates/dstrategies-back-analysis-template.yaml</strong> to add the required <strong>&lt;PROMETHEUS-PASSWORD&gt;</strong>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -581,7 +585,7 @@ It is required to accept <strong>self-signed certificates</strong> provided by O
 <p>We will deploy a new version <strong>V2.0.0</strong>.</p>
 </div>
 <div class="paragraph">
-<p>Before applying these changes, it is important to monitor the current version via the frontend. To track all canary processes, it is required to prepare the frontend to generate multiple requests. <strong>If do not have multiple requests the back application will not generate traffic and the rollout will fail</strong>. Remember that we are using the metrics to decide if we go on with the rollout or not. Without traffic we don&#8217;t have metrics.</p>
+<p>Before applying these changes, it is important to monitor the current version via the frontend. To track all canary processes, it is required to prepare the frontend to generate multiple requests. <strong>If there aren&#8217;t multiple requests the back application will not have traffic and the rollout will fail</strong>. Remember that we are using the metrics to decide if we go on with the rollout or not. Without traffic we don&#8217;t have metrics.</p>
 </div>
 <div class="paragraph">
 <p>Visit the frontend route via your web browser, edit the number of <strong>Calls Retries</strong> to 10000 and push - JUMP- button and ensure the following message is displaying on your screen:</p>
@@ -730,7 +734,7 @@ git push</code></pre>
 In our case the commit that we have done not only changes the ReplicaSet but also the ConfigMap. The <strong>undo</strong> command only changes the ReplicaSet, so it does not work for us.</p>
 </div>
 <div class="paragraph">
-<p>I recommend doing the changes in git. We will revert the last commit</p>
+<p>We recommend making  the changes in git. We will revert the last commit</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -741,7 +745,7 @@ In our case the commit that we have done not only changes the ReplicaSet but als
 <p>If we just revert the changes in git we will go back to the previous version. But <strong>Argo Rollouts</strong> will take this revert as a new release so it will do it throw the steps that we have configured. We want a <strong>quick rollback</strong> we don&#8217;t want a step-by-step revert. To achieve the <strong>quick rollback</strong> we will configure <strong>Argo Rollouts</strong> without steps for the rollback.</p>
 </div>
 <div class="paragraph">
-<p>In the file <strong>./rhsm-canary/templates/dstrategies-back-rollout.yaml</strong>  under the <strong>steps</strong> delete all the steps and only set one step <strong>- setWeight: 100</strong>:</p>
+<p>In the file <strong>./rhsm-canary/templates/dstrategies-back-rollout.yaml</strong>  under the <strong>steps</strong>, delete all the steps and only set one step <strong>- setWeight: 100</strong>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
