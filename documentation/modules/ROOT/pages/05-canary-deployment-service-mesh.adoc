@@ -194,30 +194,30 @@ image::certs_warning.png[width=50%]
  
 Then you can use the frontend https://dstrategies-frontend-{user}-canary-service-mesh-istio-system.apps.%CLUSTER%/[URL]
 
-Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying on your screen:
+Visit the frontend route via your web browser, push - JUMP - button and ensure the following message is displaying on your screen:
 
 .Frontend Interface
 image::frontend-canary-service-mesh.png["Frontend Interface"]
 
-Notice that in each microservice response we have added metadata information to see better the *version* of each application. This will help us to see the changes while we do the canary deployment.  We can see that the current version is *V1.0.0*.
+Notice that we have added metadata information in each microservice response to see better the *version* of each application. This will help us to see the changes while we do the canary deployment.  We can see that the current version is *V1.0.0*.
 
 [#05-canary]
 == Dstrategies-back canary deployment
 
-To test canary deployment we are going to do changes in the backend application dstrategies-back.
+To test canary deployment we are going to do changes in the backend application `dstrategies-back`.
  
 We will deploy a new version *V2.0.0*. 
 
-Before applying these changes, it is important to monitor the current version via the frontend. To track all canary processes, it is required to prepare the frontend to generate multiple requests. *If there aren't multiple requests the back application will not have traffic and the rollout will fail*. Remember that we are using the metrics to decide if we go on with the rollout or not. Without traffic we don't have metrics.
+Before applying these changes, it is important to monitor the current version via the frontend. To track all canary processes, it is required to prepare the frontend to generate multiple requests. *If there aren't multiple requests the back application will not have traffic and the rollout will fail*. Remember that we are using the metrics to decide if we go on with the rollout or not. Without traffic, we don't have metrics.
 
-Visit the frontend route via your web browser, edit the number of *Calls Retries* to 10000 and push - JUMP- button and ensure the following message is displaying on your screen:
+Visit the frontend route via your web browser, edit the number of *Calls Retries* to 10000 and push - JUMP - button and ensure the following message is displaying on your screen:
 
 .Frontend Interface
 image::frontend-canary-service-mesh-retries.png["Frontend Interface"]
 
-**Argo Rollouts** will automatically deploy a new dstrategies-back revision. Based on the steps that you have defined, we will see how the traffic will go to the different versions.
+**Argo Rollouts** will automatically deploy a new `dstrategies-back` revision. Based on the steps that you have defined, we will see how the traffic will go to the different versions.
 
-We also encourage you to use https://kiali-istio-system.apps.%CLUSTER%/[Kiali] graph to see the percentages of the traffic that goes to each version. Log in with your Openshift lab-user and select you namespace.
+We also encourage you to use https://kiali-istio-system.apps.%CLUSTER%/[Kiali] graph to see the percentages of the traffic that goes to each version. Log in with your Openshift lab-user and select your namespace.
 
 .Kiali namespace
 image::kiali-namespace.png["Kiali namespace]
@@ -252,7 +252,7 @@ git push
 
 ArgoCD will refresh the status after some minutes. If you don't want to wait you can refresh it manually from ArgoCD UI.
 
-This is our current status (It can be different depending on the steps you have defined)):
+This is our current status (It can be different depending on the steps you have defined):
 
 image::canary-service-mesh-rollout-step-1.png["Dstrategies Step 1]
 
@@ -277,7 +277,7 @@ NAME                                  KIND        STATUS     AGE    INFO
       └──□ dstrategies-back-67fc9fb79b-xlkhp  Pod         ✔ Running  3m13s  ready:2/2
 ----
 
-On the front web page you will see how the versions change.
+On the front web page, you will see how the versions change.
 
 New revision:
 
@@ -311,10 +311,11 @@ image::frontend-canary-service-mesh-v2.png["Frontend Interface"]
 
 Imagine that something goes wrong, we know that this never happens but just in case. We can do a very *quick rollback* just by undoing the change.
 
-**Argo Rollouts** has an https://argoproj.github.io/argo-rollouts/generated/kubectl-argo-rollouts/kubectl-argo-rollouts_undo/[undo] command to do the rollback. In our opinion, we don't like this procedure because it is not aligned with GitOps. The changes that **Argo Rollouts** do does not come from git, so git is OutOfSync with what we have in Openshift.
+**Argo Rollouts** has an https://argoproj.github.io/argo-rollouts/generated/kubectl-argo-rollouts/kubectl-argo-rollouts_undo/[undo] command to do the rollback. In our opinion, we don't like this procedure because it is not aligned with GitOps. The changes that **Argo Rollouts** does do not come from git, so git is `OutOfSync` with what we have in Openshift.
 In our case the commit that we have done not only changes the ReplicaSet but also the ConfigMap. The *undo* command only changes the ReplicaSet, so it does not work for us.
 
-We recommend making  the changes in git. We will revert the last commit
+We recommend making changes in git rather than in Argo Rollouts. Therefore, we will revert the last commit:
+
 [.console-input]
 [source,input,subs="+macros,+attributes"]
 ----
@@ -361,7 +362,7 @@ image::canary-service-mesh-rollout-step-rollback.png["Dstrategies Step Rollback"
 
 To test the  service, you can use the frontend https://dstrategies-frontend-{user}-canary-service-mesh-istio-system.apps.%CLUSTER%/[URL]
 
-Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying on your screen:
+Visit the frontend route via your web browser, push - JUMP - button and ensure the following message is displaying on your screen:
 
 .Frontend Interface
 image::frontend-canary-service-mesh.png["Frontend Interface"]
