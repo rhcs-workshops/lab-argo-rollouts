@@ -58,13 +58,13 @@ NOTE: For more information about AnalysisTemplate, please visit the following ht
 
 Finally, it is required to create a **Deployment** object to deploy the frontend application. This application helps us to test the canary rollout strategy from a web interface and see backend information.
 
-To allow communication between the frontend and the backend, it is required to edit the file named *./canary/dstrategies-frontend-deployment.yaml* to add the required **<USERNAME>** and **<OCP_APPS_DOMAIN>**. You can check their values in the xref:01-setup.adoc#01-parameters[parameters chapter].
+To allow communication between the frontend and the backend, it is required to edit the file named *./canary/dstrategies-frontend-deployment.yaml* to add the required **<USERNAME>** and **<OCP_DOMAIN>**. You can check their values in the xref:01-setup.adoc#01-parameters[parameters chapter].
 
 [source,yaml,subs="+macros,+attributes"]
 ----
         env:  
           - name: REACT_APP_BACK
-            value: http://dstrategies-back-online-<USERNAME>-canary.<OCP_APPS_DOMAIN>/dstrategies-back
+            value: http://dstrategies-back-online-<USERNAME>-canary.apps.<OCP_DOMAIN>/dstrategies-back
           - name: REACT_APP_CATEGORY
             value: CANARY
 ----
@@ -136,7 +136,7 @@ OpenShift Components - Online
 
 In Blue/Green deployment we always have an offline service to test the version that is not in production. In the case of canary deployment, we do not need it because progressively we will have the new version in production. 
 
-We can also see the rollout´s status.
+We can also see the rollout's status.
 
 [.console-input]
 [source,input,subs="+macros,+attributes"]
@@ -157,7 +157,7 @@ NAME                                  KIND        STATUS     AGE  INFO
       └──□ dstrategies-back-67fc9fb79b-xlkhp  Pod         ✔ Running  38s  ready:1/1
 ----
 
-We have defined an active or online service 'dstrategies-back-online'. Final user will always use 'dstrategies-back-online'. When a new version is deployed **Argo Rollouts** create a new revision (ReplicaSet). The number of replicas in the new release increases based on the information in the steps, and the number of replicas in the old release decreases by the same number. We have configured a pause duration between each step. To learn more about **Argo Rollouts**, please read https://argoproj.github.io/argo-rollouts/features/canary/[this].
+We have defined an active or online service 'dstrategies-back-online'. Final users will always use 'dstrategies-back-online'. When a new version is deployed **Argo Rollouts** creates a new revision (ReplicaSet). The number of replicas in the new release increases based on the information in the steps, and the number of replicas in the old release decreases by the same number. We have configured a pause duration between each step. To learn more about **Argo Rollouts**, please read https://argoproj.github.io/argo-rollouts/features/canary/[this].
 
 [#04-test]
 == Test Dstrategies application
@@ -166,7 +166,7 @@ We have deployed the *dstrategies* with ArgoCD. We can test that it is up and ru
  
 To test the online service, you can use the frontend http://dstrategies-frontend-{user}-canary.apps.%CLUSTER%/[URL]
 
-Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying on your screen:
+Visit the frontend route via your web browser, push - JUMP - button and ensure the following message is displaying on your screen:
 
 .Frontend Interface
 image::frontend-canary.png["Frontend Interface"]
@@ -347,7 +347,8 @@ Imagine that something goes wrong, we know that this never happens but just in c
 **Argo Rollouts** has an https://argoproj.github.io/argo-rollouts/generated/kubectl-argo-rollouts/kubectl-argo-rollouts_undo/[undo] command to do the rollback. In our opinion, we don't like this procedure because it is not aligned with GitOps. The changes that **Argo Rollouts** do does not come from git, so git is OutOfSync with what we have in Openshift.
 In our case the commit that we have done not only changes the ReplicaSet but also the ConfigMap. The *undo* command only changes the ReplicaSet, so it does not work for us.
 
-We recommend making  the changes in git. We will revert the last commit
+We recommend making changes in git rather than in Argo Rollouts. Therefore, we will revert the last commit:
+
 [.console-input]
 [source,input,subs="+macros,+attributes"]
 ----

@@ -52,8 +52,6 @@ The following table includes the parameters that the instructor should provide y
 | _https://console-openshift-console.apps.%CLUSTER%_
 | Openshift Domain
 | %CLUSTER%
-| Openshift Apps Domain
-| apps.%CLUSTER%
 | Username
 | {user}
 | Password
@@ -173,7 +171,7 @@ Please fork the repository and clone it in your local machine to have full auton
 [.console-input]
 [source,input,subs="+macros,+attributes"]
 ----
-git clone https://github.com/chamge_me/dstrategies-app-deployment
+git clone https://github.com/change_me/dstrategies-app-deployment
 cd dstrategies-app-deployment
 ----
 
