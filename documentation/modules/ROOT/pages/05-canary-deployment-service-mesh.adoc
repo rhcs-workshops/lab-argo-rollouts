@@ -150,14 +150,14 @@ To achieve canary deployment with *Cloud Native* applications using **Argo Rollo
 image::canary-service-mesh-rollout-step-0.png["Dstrategies initial status"]
 
 OpenShift Components
-TODO
-- Routes and Services declared with the suffix -online
-- Routes mapped only to the online services
-- Services mapped to the rollout.
+
+- Only one route and service that maps to the Service Mesh Destination Rule.
+- A Destination Rule exposing the pods of the active Replica Sets.
+- One Replica Set for each version of the application.
 
 In Blue/Green deployment we always have an offline service to test the version that is not in production. In the case of canary deployment, we do not need it because progressively we will have the new version in production. 
 
-We can also see the rollout´s status.
+We can also see the rollout's status.
 
 [.console-input]
 [source,input,subs="+macros,+attributes"]
@@ -178,7 +178,7 @@ NAME                                  KIND        STATUS     AGE  INFO
       └──□ dstrategies-back-67fc9fb79b-xlkhp  Pod         ✔ Running  38s  ready:2/2
 ----
 
-We have defined an active service 'dstrategies-back'. Final users will always use 'dstrategies-back'. When a new version is deployed, **Argo Rollouts** creates a new revision (ReplicaSet). The number of replicas in the new release increases based on the information in the steps, and the number of replicas in the old release decreases by the same number. But in this case, the amount of traffic that is sent to each version will be managed by the VirtualService.
+We have defined an active service `dstrategies-back`. Final users will always use `dstrategies-back``. When a new version is deployed, **Argo Rollouts** creates a new revision (ReplicaSet). The number of replicas in the new release increases based on the information in the steps, and the number of replicas in the old release decreases by the same number. But in this case, the amount of traffic that is sent to each version will be managed by the VirtualService.
 
 [#05-test]
 == Test Dstrategies application

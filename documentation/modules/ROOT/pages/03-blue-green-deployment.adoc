@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 [#03-arch]
 == Application architecture
 
-As mentioned before, we have a very simple application with two services. One frontal React app called *dstrategies-front* and one backend Quarkus app called *dstrategies-back*. We will use the front app to call several times the back app and see how the back version change during the deployment.
+As mentioned before, we have a very simple application with two services. One frontal React app called *dstrategies-front* and one backend Quarkus app called *dstrategies-back*. We will use the front app to call several times the back app and see how the back version changes during the deployment.
 
 To achieve Blue/Green deployment with *Cloud Native* applications using **Argo Rollouts**, we have designed this architecture.
 
@@ -45,7 +45,7 @@ Please take a look at the files *./blue-green/dstrategies-back-service-online.ya
 
 The Rollout object controls the application deployment. If you look closely, it is possible to find many similarities between an Argo Rollout object and a Kubernetes Deployment. The main difference between the previous objects referenced is the rollout strategy field. 
 
-Please edit the file named *./blue-green/dstrategies-back-rollout.yaml* in oder to add the required **<SERVICE_OFFLINE>** and **<SERVICE_ONLINE>** service names:
+Please edit the file named *./blue-green/dstrategies-back-rollout.yaml* in order to add the required **<SERVICE_OFFLINE>** and **<SERVICE_ONLINE>** service names:
 
 [source,yaml,subs="+macros,+attributes"]
 ----
@@ -62,7 +62,7 @@ Please edit the file named *./blue-green/dstrategies-back-rollout.yaml* in oder 
 [#03-anatemp]
 === Modify Analysis Template 
 
-We have created an AnalysisTemplate 'dstrategies-back-analysis-template' that just validates the health of the application, for production environments a better analysis should be done. **Argo Rollouts** use this AnalysisTemplate to validate a new version and set whether it is ready to be promoted or not.
+We have created an AnalysisTemplate 'dstrategies-back-analysis-template' that just validates the health of the application, for production environments a better analysis should be done. **Argo Rollouts** uses this AnalysisTemplate to validate a new version and set whether it is ready to be promoted or not.
 
 Please edit the file named *./blue-green/dstrategies-back-analysis-template.yaml* to add the required **<USERNAME>** that helps to reference the user namespace in the healthcheck URL.
 
@@ -370,10 +370,11 @@ image::frontend-blue-green-v2.png["Frontend Interface V2.0.0"]
 
 Imagine that something goes wrong, we know that this never happens but just in case. We can do a very *quick rollback* just by undoing the change in the *dstrategies-back* online service.
 
-**Argo Rollouts** has an https://argoproj.github.io/argo-rollouts/generated/kubectl-argo-rollouts/kubectl-argo-rollouts_undo/[undo] command to do the rollback. In our opinion, we don't like this procedure because it is not aligned with GitOps. The changes that **Argo Rollouts** do does not come from git, so git is OutOfSync with what we have in Openshift.
+**Argo Rollouts** has an https://argoproj.github.io/argo-rollouts/generated/kubectl-argo-rollouts/kubectl-argo-rollouts_undo/[undo] command to do the rollback. In our opinion, we don't like this procedure because it is not aligned with GitOps. **Argo Rollouts** changes do not come from git, so git is `OutOfSync` with what we have in Openshift.
 In our case the commit that we have done not only changes the ReplicaSet but also the ConfigMap. The *undo* command only changes the ReplicaSet, so it does not work for us.
 
-We recommend making  the changes in git. We will revert the last commit
+We recommend making changes in git rather than in Argo Rollouts. Therefore, we will revert the last commit:
+
 [.console-input]
 [source,input,subs="+macros,+attributes"]
 ----
