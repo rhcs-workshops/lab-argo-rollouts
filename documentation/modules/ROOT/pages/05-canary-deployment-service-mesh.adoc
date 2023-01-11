@@ -65,14 +65,14 @@ Please edit the file named *./rhsm-canary/templates/dstrategies-back-rollout.yam
 
 It is required to create a **Deployment** object to deploy the frontend application. This application helps us to test the canary rollout strategy from a web interface and see backend information.
 
-To allow communication between the frontend and the backend, it is required to edit the file named *./rhsm-canary/edit.values.yaml* to add the required **<OCP_APPS_DOMAIN>**. You can check their values in the xref:01-setup.adoc#01-parameters[parameters chapter].
+To allow communication between the frontend and the backend, it is required to edit the file named *./rhsm-canary/edit.values.yaml* to add the required **<OCP_DOMAIN>**. You can check their values in the xref:01-setup.adoc#01-parameters[parameters chapter].
 
 [source,yaml,subs="+macros,+attributes"]
 ----
 service:
   image:
     version: V1.0.0
-domain: <OCP_APPS_DOMAIN>
+domain: <OCP_DOMAIN>
 ----
 
 [#05-prometheus]

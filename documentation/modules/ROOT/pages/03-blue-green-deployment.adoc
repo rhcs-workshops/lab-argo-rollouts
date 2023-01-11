@@ -85,13 +85,13 @@ NOTE: For more information about AnalysisTemplate, please visit the following ht
 
 Finally, it is required to create a **Deployment** object to deploy the frontend application. This application helps us to test the blue-green rollout strategy from a web interface and see backend information.
 
-To allow communication between the frontend and the backend, it is required to edit the file named *./blue-green/dstrategies-frontend-deployment.yaml* to add the required **<USERNAME>** and **<OCP_APPS_DOMAIN>**. You can check their values in the xref:01-setup.adoc#01-parameters[parameters chapter].
+To allow communication between the frontend and the backend, it is required to edit the file named *./blue-green/dstrategies-frontend-deployment.yaml* to add the required **<USERNAME>** and **<OCP_DOMAIN>**. You can check their values in the xref:01-setup.adoc#01-parameters[parameters chapter].
 
 [source,yaml,subs="+macros,+attributes"]
 ----
         env:  
           - name: REACT_APP_BACK
-            value: http://dstrategies-back-online-<USERNAME>-blue-green.<OCP_APPS_DOMAIN>/dstrategies-back
+            value: http://dstrategies-back-online-<USERNAME>-blue-green.apps.<OCP_DOMAIN>/dstrategies-back
           - name: REACT_APP_CATEGORY
             value: BLUE-GREEN
 ----
