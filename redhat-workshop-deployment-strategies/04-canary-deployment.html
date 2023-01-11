@@ -401,13 +401,13 @@ For more information about AnalysisTemplate, please visit the following <a href=
 <p>Finally, it is required to create a <strong>Deployment</strong> object to deploy the frontend application. This application helps us to test the canary rollout strategy from a web interface and see backend information.</p>
 </div>
 <div class="paragraph">
-<p>To allow communication between the frontend and the backend, it is required to edit the file named <strong>./canary/dstrategies-frontend-deployment.yaml</strong> to add the required <strong>&lt;USERNAME&gt;</strong> and <strong>&lt;OCP_APPS_DOMAIN&gt;</strong>. You can check their values in the <a href="01-setup.html#01-parameters" class="xref page">parameters chapter</a>.</p>
+<p>To allow communication between the frontend and the backend, it is required to edit the file named <strong>./canary/dstrategies-frontend-deployment.yaml</strong> to add the required <strong>&lt;USERNAME&gt;</strong> and <strong>&lt;OCP_DOMAIN&gt;</strong>. You can check their values in the <a href="01-setup.html#01-parameters" class="xref page">parameters chapter</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">        env:
           - name: REACT_APP_BACK
-            value: <a href="http://dstrategies-back-online-&lt;USERNAME&gt;-canary.&lt;OCP_APPS_DOMAIN&gt;/dstrategies-back" class="bare">http://dstrategies-back-online-&lt;USERNAME&gt;-canary.&lt;OCP_APPS_DOMAIN&gt;/dstrategies-back</a>
+            value: <a href="http://dstrategies-back-online-&lt;USERNAME&gt;-canary.apps.&lt;OCP_DOMAIN&gt;/dstrategies-back" class="bare">http://dstrategies-back-online-&lt;USERNAME&gt;-canary.apps.&lt;OCP_DOMAIN&gt;/dstrategies-back</a>
           - name: REACT_APP_CATEGORY
             value: CANARY</code></pre>
 </div>
@@ -503,7 +503,7 @@ spec:
 <p>In Blue/Green deployment we always have an offline service to test the version that is not in production. In the case of canary deployment, we do not need it because progressively we will have the new version in production.</p>
 </div>
 <div class="paragraph">
-<p>We can also see the rollout´s status.</p>
+<p>We can also see the rollout&#8217;s status.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -523,7 +523,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>We have defined an active or online service 'dstrategies-back-online'. Final user will always use 'dstrategies-back-online'. When a new version is deployed <strong>Argo Rollouts</strong> create a new revision (ReplicaSet). The number of replicas in the new release increases based on the information in the steps, and the number of replicas in the old release decreases by the same number. We have configured a pause duration between each step. To learn more about <strong>Argo Rollouts</strong>, please read <a href="https://argoproj.github.io/argo-rollouts/features/canary/">this</a>.</p>
+<p>We have defined an active or online service 'dstrategies-back-online'. Final users will always use 'dstrategies-back-online'. When a new version is deployed <strong>Argo Rollouts</strong> creates a new revision (ReplicaSet). The number of replicas in the new release increases based on the information in the steps, and the number of replicas in the old release decreases by the same number. We have configured a pause duration between each step. To learn more about <strong>Argo Rollouts</strong>, please read <a href="https://argoproj.github.io/argo-rollouts/features/canary/">this</a>.</p>
 </div>
 </div>
 </div>
@@ -537,7 +537,7 @@ spec:
 <p>To test the online service, you can use the frontend <a href="http://dstrategies-frontend-%USER%-canary.apps.%CLUSTER%/">URL</a></p>
 </div>
 <div class="paragraph">
-<p>Visit the frontend route via your web browser, push - JUMP- button and ensure the following message is displaying on your screen:</p>
+<p>Visit the frontend route via your web browser, push - JUMP - button and ensure the following message is displaying on your screen:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -781,7 +781,7 @@ git push</code></pre>
 In our case the commit that we have done not only changes the ReplicaSet but also the ConfigMap. The <strong>undo</strong> command only changes the ReplicaSet, so it does not work for us.</p>
 </div>
 <div class="paragraph">
-<p>We recommend making  the changes in git. We will revert the last commit</p>
+<p>We recommend making changes in git rather than in Argo Rollouts. Therefore, we will revert the last commit:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
