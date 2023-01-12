@@ -3,7 +3,9 @@ include::_attributes.adoc[]
 
 In the previous section, we executed a canary deployment using *Argo Rollouts* without https://argoproj.github.io/argo-rollouts/features/traffic-management/[traffic management]. When we set a 10% weight it does not mean that 10% of the traffic goes to the new version. Because, as we explained before, *Argo Rollouts* makes a best-effort attempt to achieve the percentage listed in the weight between the new and old versions.
 
-To achieve the right percentage in each version, we are going to use traffic management with **Openshift Service Mesh** 
+To achieve the right percentage in each version, we are going to use traffic management with **Openshift Service Mesh**.
+
+**Red Hat Openshift Service Mesh**, based on the open source project Istio, provides a uniform way to connect, manage, and observe microservices-based applications. It provides behavioral insight into, and control of, the networked microservices in your service mesh.
 
 Moreover, we have another huge improvement. The back application is sending metrics to Prometheus. We will configure *Argo Rollouts* to use those metrics to decide if keep increasing the amount of traffic to the new version or cancel the rollout.
 
@@ -151,9 +153,9 @@ image::canary-service-mesh-rollout-step-0.png["Dstrategies initial status"]
 
 OpenShift Components
 
-- Only one route and service that maps to the Service Mesh Destination Rule.
-- A Destination Rule exposing the pods of the active Replica Sets.
-- One Replica Set for each version of the application.
+- Only one route that is the entry for Openshift and the Service Mesh Ingress Gateway 
+- A k8s service with all pod replicas of *DStrategies* back microservices included (_New and old versions_).
+- A Service Mesh _Virtual Service_ and _Destination Rule_ that redirect the traffic to the respective active back microservice replicas (_Deployed by a specific ReplicaSet controlled by Argo Rollout_).
 
 In Blue/Green deployment we always have an offline service to test the version that is not in production. In the case of canary deployment, we do not need it because progressively we will have the new version in production. 
 
