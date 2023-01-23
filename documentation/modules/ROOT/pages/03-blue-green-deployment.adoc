@@ -112,7 +112,7 @@ git push
 [#03-argo]
 == Argo CD Application
 
-We are going to create the application *DStrategies* to apply the files modified previously to test Blue/Green deployment. Please edit the following yaml and set your own GitHub repository in the *reportURL*. Create a file called *application-dstrategies-blue-green.yaml*
+We are going to create the application *DStrategies* to apply the files modified previously to test Blue/Green deployment. Please edit the following yaml and set your own GitHub repository in the *repoURL*. Create a file called *application-dstrategies-blue-green.yaml*
 
 [.console-input]
 [source,input,yaml,subs="+macros,+attributes"]
