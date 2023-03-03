@@ -328,7 +328,10 @@
 <p>In the previous section, we executed a canary deployment using <strong>Argo Rollouts</strong> without <a href="https://argoproj.github.io/argo-rollouts/features/traffic-management/">traffic management</a>. When we set a 10% weight it does not mean that 10% of the traffic goes to the new version. Because, as we explained before, <strong>Argo Rollouts</strong> makes a best-effort attempt to achieve the percentage listed in the weight between the new and old versions.</p>
 </div>
 <div class="paragraph">
-<p>To achieve the right percentage in each version, we are going to use traffic management with <strong>Openshift Service Mesh</strong></p>
+<p>To achieve the right percentage in each version, we are going to use traffic management with <strong>Openshift Service Mesh</strong>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Red Hat Openshift Service Mesh</strong>, based on the open source project Istio, provides a uniform way to connect, manage, and observe microservices-based applications. It provides behavioral insight into, and control of, the networked microservices in your service mesh.</p>
 </div>
 <div class="paragraph">
 <p>Moreover, we have another huge improvement. The back application is sending metrics to Prometheus. We will configure <strong>Argo Rollouts</strong> to use those metrics to decide if keep increasing the amount of traffic to the new version or cancel the rollout.</p>
@@ -502,13 +505,13 @@ spec:
 <div class="ulist">
 <ul>
 <li>
-<p>Only one route and service that maps to the Service Mesh Destination Rule.</p>
+<p>Only one route that is the entry for Openshift and the Service Mesh Ingress Gateway</p>
 </li>
 <li>
-<p>A Destination Rule exposing the pods of the active Replica Sets.</p>
+<p>A k8s service with all pod replicas of <strong>DStrategies</strong> back microservices included (<em>New and old versions</em>).</p>
 </li>
 <li>
-<p>One Replica Set for each version of the application.</p>
+<p>A Service Mesh <em>Virtual Service</em> and <em>Destination Rule</em> that redirect the traffic to the respective active back microservice replicas (<em>Deployed by a specific ReplicaSet controlled by Argo Rollout</em>).</p>
 </li>
 </ul>
 </div>
