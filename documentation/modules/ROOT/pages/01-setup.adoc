@@ -3,9 +3,9 @@
 include::_attributes.adoc[]
 
 [#01-prerequisites]
-== Prerequisites
+== Prerequisites (optional)
 
-During this tutorial, it will be required to work with different tools for running the exercises included. Please install the following software:
+During this tutorial, it will be required to work with different tools for running the exercises included. We have already installed the Web Console operator with those tools. But if you want to use your terminal, please install the following software:
 
 include::partial$requirements.adoc[]
 
@@ -148,6 +148,10 @@ Install it using the https://argoproj.github.io/argo-rollouts/installation/#kube
 [source,bash, subs="+macros,+attributes"]
 ----
 $ oc argo rollouts list rollouts
+----
+[.console-output]
+[source,input,subs="+macros,+attributes"]
+----
 No resources found.
 ----
 
@@ -160,9 +164,9 @@ WARNING: If the previous command shows something like `Error: unknown command "a
 
 Following the GitOps practices, all the deployment configuration is stored in the git repo. We have created an initial repository that you will change to configure your deployment. As part of the demo, you will have to do some changes and commits. 
 
-Please fork the repository and clone it in your local machine to have full autonomy to make changes and deploy applications. In order to complete this task, follow the next steps:
+**Please fork the repository** and clone it in your local machine to have full autonomy to make changes and deploy applications. In order to complete this task, follow the next steps:
 
-* Access the https://github.com/rhte2023-argo-rollouts/dstrategies-app-deployment[DStrategy App Deployment] repository. 
+* Access the https://github.com/rhcs-workshops/dstrategies-app-deployment[DStrategy App Deployment] repository. 
 
 * Fork it on your GitHub account. If prompted, choose to fork only the `main` branch.
 
@@ -220,4 +224,4 @@ image::github-token-02.png["Step 2 to create a GitHub token"]
 
 NOTE: The cluster is already set up, so you do not need to follow the steps in this section. However, save the following link if you want to recreate this workshop in your own Openshift cluster.
 
-Please visit https://github.com/rhte2023-argo-rollouts/ocp-cluster-setup.git[Openshift Cluster Setup] for more information about setting up an Openshift cluster in order to run this workshop.
+Please visit https://github.com/rhcs-workshops/ocp-cluster-setup.git[Openshift Cluster Setup] for more information about setting up an Openshift cluster in order to run this workshop.
