@@ -31,7 +31,7 @@ During this laboratory, a set of resources are provided by the instructor in ord
 Please review the following list to have an overall understanding of the resources provided for completing this laboratory:
 
 - An Openshift cluster that will host and make available a set of applications
-- A set of dedicated namespaces per user in the Openshift Cluster
+- A set of dedicated project per user in the Openshift Cluster
 - An ArgoCD installation that allows attendees to deploy applications in a GitOps fashion
 - An Argo Rollouts installation that allows attendees to deploy applications using deployment strategies such as Blue/Green and Canary 
 - A set of GitHub repositories that include the templates and automatisms required to deploy a group of applications
@@ -119,6 +119,8 @@ image::oc_login_output.png["OC CLI Login Output"]
 [#01-accesscli]
 === OpenShift projects
 
+Please execute the following command to see the project that has been created for this laboratory.
+
 [.lines_space]
 [.console-input]
 [source,bash, subs="+macros,+attributes"]
@@ -131,14 +133,14 @@ image::oc_projects_output.png["OC CLI projects]
 
 TIP: Please pay special attention to *oc CLI* because you will need to use this tool several times during this laboratory.
 
-As shown in the output, the user will have access to the following namespaces:
+As shown in the output, the user will have access to the following project:
 
 * *{user}-gitops-argocd*: It contains Argo CD installation and all the GitOps objects.
 * *{user}-blue-green*: It will contain the application using Blue/Green deployment.
 * *{user}-canary*: It will contain the application using Canary deployment.
 * *{user}-canary-service-mesh*: It will contain the application using Canary deployment with Service Mesh.
 
-Each user will have its own four namespaces.
+Each user will have its own four project.
 
 [#01-accessArgoCD]
 === Access - Argo CD dashboard
