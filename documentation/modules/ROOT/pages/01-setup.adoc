@@ -88,12 +88,12 @@ NOTE: Use *lab-users* section to log in with your credentials.
 We have installed the OpenShift command line terminal with all the CLI that are needed for this laboratory.
 
 .OpenShift command line terminal
-image::oc_termina1.png[]
+image::oc_terminal1.png[]
 
 In this terminal, you will be able to execute all the commands.
 
 .Terminal
-image::oc_termina2.png[]
+image::oc_terminal2.png[]
 
 [#01-accesscli]
 === Access - OC Client
