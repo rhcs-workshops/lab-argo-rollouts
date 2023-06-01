@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Environment Setup :: RHTE Workshop - Deployment Strategies with Argo CD and Argo Rollouts</title>
-    <link rel="canonical" href="https://github.com/rhte2023-argo-rollouts/redhat-workshop-deployment-strategies/redhat-workshop-deployment-strategies/01-setup.html">
+    <link rel="canonical" href="https://github.com/rhcs-workshops/lab-argo-rollouts/redhat-workshop-deployment-strategies/01-setup.html">
     <link rel="prev" href="index.html">
     <link rel="next" href="02-deployment-strategies.html">
     <meta name="generator" content="Antora 3.0.0">
@@ -18,7 +18,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" href="https://github.com/rhte2023-argo-rollouts/redhat-workshop-deployment-strategies">RHTE Workshop - Deployment Strategies with Argo CD and Argo Rollouts</a>
+      <a class="navbar-item" href="https://github.com/rhcs-workshops/lab-argo-rollouts">RHTE Workshop - Deployment Strategies with Argo CD and Argo Rollouts</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -311,23 +311,22 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Workshop</a></li>
     <li><a href="01-setup.html">1. Environment Setup</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/rhte2023-argo-rollouts/redhat-workshop-deployment-strategies/edit/master/documentation/modules/ROOT/pages/01-setup.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/rhcs-workshops/lab-argo-rollouts/edit/master/documentation/modules/ROOT/pages/01-setup.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
 <h1 class="page">Environment Setup</h1>
 <div class="sect1">
-<h2 id="01-prerequisites"><a class="anchor" href="#01-prerequisites"></a>Prerequisites</h2>
+<h2 id="01-prerequisites"><a class="anchor" href="#01-prerequisites"></a>Prerequisites (optional)</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>During this tutorial, it will be required to work with different tools for running the exercises included. Please install the following software:</p>
+<p>During this tutorial, it will be required to work with different tools for running the exercises included. We have already installed the Web Console operator with those tools. But if you want to use your terminal, please install the following software:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -644,8 +643,12 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 </div>
 <div class="listingblock lines_space console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ oc argo rollouts list rollouts
-No resources found.</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ oc argo rollouts list rollouts</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-input hljs" data-lang="input">No resources found.</code></pre>
 </div>
 </div>
 <div class="admonitionblock warning">
@@ -667,12 +670,12 @@ If the previous command shows something like <code>Error: unknown command "argo"
 <p>Following the GitOps practices, all the deployment configuration is stored in the git repo. We have created an initial repository that you will change to configure your deployment. As part of the demo, you will have to do some changes and commits.</p>
 </div>
 <div class="paragraph">
-<p>Please fork the repository and clone it in your local machine to have full autonomy to make changes and deploy applications. In order to complete this task, follow the next steps:</p>
+<p><strong>Please fork the repository</strong> and clone it in your local machine to have full autonomy to make changes and deploy applications. In order to complete this task, follow the next steps:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Access the <a href="https://github.com/rhte2023-argo-rollouts/dstrategies-app-deployment">DStrategy App Deployment</a> repository.</p>
+<p>Access the <a href="https://github.com/rhcs-workshops/dstrategies-app-deployment">DStrategy App Deployment</a> repository.</p>
 </li>
 <li>
 <p>Fork it on your GitHub account. If prompted, choose to fork only the <code>main</code> branch.</p>
@@ -791,7 +794,7 @@ The cluster is already set up, so you do not need to follow the steps in this se
 </table>
 </div>
 <div class="paragraph">
-<p>Please visit <a href="https://github.com/rhte2023-argo-rollouts/ocp-cluster-setup.git">Openshift Cluster Setup</a> for more information about setting up an Openshift cluster in order to run this workshop.</p>
+<p>Please visit <a href="https://github.com/rhcs-workshops/ocp-cluster-setup.git">Openshift Cluster Setup</a> for more information about setting up an Openshift cluster in order to run this workshop.</p>
 </div>
 </div>
 </div>
