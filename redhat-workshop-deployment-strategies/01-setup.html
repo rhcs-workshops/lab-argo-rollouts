@@ -433,7 +433,7 @@ Please review the official documentation to install the latest versions of these
 <p>An Openshift cluster that will host and make available a set of applications</p>
 </li>
 <li>
-<p>A set of dedicated namespaces per user in the Openshift Cluster</p>
+<p>A set of dedicated project per user in the Openshift Cluster</p>
 </li>
 <li>
 <p>An ArgoCD installation that allows attendees to deploy applications in a GitOps fashion</p>
@@ -593,6 +593,9 @@ Use <strong>lab-users</strong> section to log in with your credentials.
 </div>
 <div class="sect2">
 <h3 id="01-accesscli"><a class="anchor" href="#01-accesscli"></a>OpenShift projects</h3>
+<div class="paragraph">
+<p>Please execute the following command to see the project that has been created for this laboratory.</p>
+</div>
 <div class="listingblock lines_space console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc projects</code></pre>
@@ -617,7 +620,7 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 </table>
 </div>
 <div class="paragraph">
-<p>As shown in the output, the user will have access to the following namespaces:</p>
+<p>As shown in the output, the user will have access to the following project:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -636,7 +639,7 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 </ul>
 </div>
 <div class="paragraph">
-<p>Each user will have its own four namespaces.</p>
+<p>Each user will have its own four project.</p>
 </div>
 </div>
 <div class="sect2">
