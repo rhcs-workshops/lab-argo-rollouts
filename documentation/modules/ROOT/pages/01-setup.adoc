@@ -5,18 +5,18 @@ include::_attributes.adoc[]
 [#01-prerequisites]
 == Prerequisites (optional)
 
-During this tutorial, it will be required to work with different tools for running the exercises included. We have already installed the Web Console operator with those tools. But if you want to use your terminal, please install the following software:
+During this laboratory, it will be required to work with different tools for running the exercises included. We have already installed the Web Console operator with those tools. But if you want to use your terminal, please install the following software:
 
 include::partial$requirements.adoc[]
 
 NOTE: Please review the official documentation to install the latest versions of these tools on your laptop following the optimum procedure 
 
-It is also required to have a https://github.com[GitHub] account in order to create some repositories during this tutorial.
+It is also required to have a https://github.com[GitHub] account to create some repositories during this laboratory.
 
 [#01-laboratory]
 == Laboratory
 
-The technical exercises included in this tutorial are based on cloud native solutions which are extensively used in the IT market. Please review the following list which includes the basics around these cloud native solutions:
+The technical exercises included in this laboratory are based on cloud native solutions which are extensively used in the IT market. Please review the following list which includes the basics around these cloud native solutions:
 
 - https://github.com/[GitHub] is a provider of Internet hosting for software development and version control using Git. It offers the distributed version control and source code management functionality of Git, plus its own features.
 - https://docs.openshift.com/container-platform/[Red Hat Openshift Container Platform Cluster] is an enterprise-ready Kubernetes container platform with full-stack automated operations to manage hybrid cloud, multicloud, and edge deployments. Red Hat OpenShift is optimized to improve developer productivity and promote innovation.
@@ -26,9 +26,9 @@ The technical exercises included in this tutorial are based on cloud native solu
 - https://quarkus.io/[Quarkus] is a Kubernetes-native Java framework tailored for GraalVM and HotSpot, crafted from best-of-breed Java libraries and standards. The goal is to make Java the leading platform in Kubernetes and serverless environments while offering developers a framework to address a wider range of distributed application architectures.
 
 
-During this tutorial, a set of resources are provided by the instructor in order to be able to complete the exercises described in the following sections. The main objective of these resources is to provide a platform, multiple templates and other resources which are required to create different objects in Openshift.
+During this laboratory, a set of resources are provided by the instructor in order to be able to complete the exercises described in the following sections. The main objective of these resources is to provide a platform, multiple templates and other resources which are required to create different objects in Openshift.
 
-Please review the following list to have an overall understanding of the resources provided for completing this tutorial:
+Please review the following list to have an overall understanding of the resources provided for completing this laboratory:
 
 - An Openshift cluster that will host and make available a set of applications
 - A set of dedicated namespaces per user in the Openshift Cluster
@@ -39,7 +39,7 @@ Please review the following list to have an overall understanding of the resourc
 [#01-parameters]
 === Parameters
 
-The instructor provides the users with the necessary Openshift credentials and other important parameters at the beginning of this tutorial to access and complete the laboratory. 
+The instructor provides the users with the necessary Openshift credentials and other important parameters at the beginning of this laboratory to access and complete the laboratory. 
 
 The following table includes the parameters that the instructor should provide you at the beginning of the laboratory:
 
@@ -73,7 +73,7 @@ The following table includes the parameters that the instructor should provide y
 [#01-accessconsole]
 === Access - OCP Console
 
-In order to check the laboratory environment, please access the Openshift Console via browser using your credentials:
+To check the laboratory environment, please access the Openshift Console via browser using your credentials:
 
 - _https://console-openshift-console.apps.%CLUSTER%_
 
@@ -83,11 +83,11 @@ image::ocp_console.png[]
 NOTE: Use *lab-users* section to log in with your credentials.
 
 [#01-ocp-terminal]
-=== OpenShift command line terminal
+=== Web Console operator
 
-We have installed the OpenShift command line terminal with all the CLI that are needed for this laboratory.
+We have installed the Web Console operator with all the CLI that are needed for this laboratory.
 
-.OpenShift command line terminal
+.Web Console operator
 image::oc_terminal1.png[]
 
 In this terminal, you will be able to execute all the commands.
@@ -96,7 +96,9 @@ In this terminal, you will be able to execute all the commands.
 image::oc_terminal2.png[]
 
 [#01-accesscli]
-=== Access - OC Client
+=== Access - OC Client (optional)
+
+If you are going to use Web Console operator, you do not need to execute this step.
 
 The OpenShift Container Platform CLI (which needs to be installed first) exposes the commands for managing your applications as well as the lower-level tools to interact with each component of your system. With the *oc* command, you can create applications and manage OpenShift Container Platform projects from a terminal.
 
@@ -114,7 +116,20 @@ If the login is successful, it should show an output similar to the following sc
 .OC CLI Login Output 
 image::oc_login_output.png["OC CLI Login Output"]
 
-TIP: Please pay special attention to *oc CLI* because you will need to use this tool several times during this tutorial.
+[#01-accesscli]
+=== OpenShift projects
+
+[.lines_space]
+[.console-input]
+[source,bash, subs="+macros,+attributes"]
+----
+oc projects
+----
+
+.OC CLI projects
+image::oc_projects_output.png["OC CLI projects]
+
+TIP: Please pay special attention to *oc CLI* because you will need to use this tool several times during this laboratory.
 
 As shown in the output, the user will have access to the following namespaces:
 
@@ -156,7 +171,7 @@ Argo Rollouts offers a Kubectl plugin to enrich the experience with Rollouts, Ex
 
 [TIP]
 ====
-You already have the Argo Rollouts CLI in the OpenShift command line terminal. But if you want to install Argo Rollouts CLI in your local follow the https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation[official documentation]
+You already have the Argo Rollouts CLI in the Web Console operator. But if you want to install Argo Rollouts CLI in your local follow the https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation[official documentation]
 ====
 
 Then, check that the plugin is correctly installed using the following command:
