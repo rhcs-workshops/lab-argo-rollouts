@@ -545,6 +545,27 @@ Use <strong>lab-users</strong> section to log in with your credentials.
 </div>
 </div>
 <div class="sect2">
+<h3 id="01-ocp-terminal"><a class="anchor" href="#01-ocp-terminal"></a>OpenShift command line terminal</h3>
+<div class="paragraph">
+<p>We have installed the OpenShift command line terminal with all the CLI that are needed for this laboratory.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/oc_termina1.png" alt="oc termina1">
+</div>
+<div class="title">Figure 2. OpenShift command line terminal</div>
+</div>
+<div class="paragraph">
+<p>In this terminal, you will be able to execute all the commands.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="oc_termina2.png" alt="oc termina2">
+</div>
+<div class="title">Figure 3. Terminal</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="01-accesscli"><a class="anchor" href="#01-accesscli"></a>Access - OC Client</h3>
 <div class="paragraph">
 <p>The OpenShift Container Platform CLI (which needs to be installed first) exposes the commands for managing your applications as well as the lower-level tools to interact with each component of your system. With the <strong>oc</strong> command, you can create applications and manage OpenShift Container Platform projects from a terminal.</p>
@@ -564,7 +585,7 @@ Use <strong>lab-users</strong> section to log in with your credentials.
 <div class="content">
 <img src="_images/oc_login_output.png" alt="OC CLI Login Output">
 </div>
-<div class="title">Figure 2. OC CLI Login Output</div>
+<div class="title">Figure 4. OC CLI Login Output</div>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -621,7 +642,7 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 <div class="content">
 <img src="_images/argocd_login.png" alt="ArgoCD login screen">
 </div>
-<div class="title">Figure 3. ArgoCD login screen</div>
+<div class="title">Figure 5. ArgoCD login screen</div>
 </div>
 <div class="paragraph">
 <p>If the login is successful, you will see the home screen where your applications will be created.</p>
@@ -630,7 +651,7 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 <div class="content">
 <img src="_images/argocd_applications.png" alt="ArgoCD applications">
 </div>
-<div class="title">Figure 4. ArgoCD applications</div>
+<div class="title">Figure 6. ArgoCD applications</div>
 </div>
 </div>
 <div class="sect2">
@@ -638,8 +659,22 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 <div class="paragraph">
 <p>Argo Rollouts offers a Kubectl plugin to enrich the experience with Rollouts, Experiments, and Analysis from the command line. It offers the ability to visualize the Argo Rollouts resources and run routine operations like promoting or retrying on those resources from the command.</p>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Install it using the <a href="https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation">official documentation</a>. Then, check that the plugin is correctly installed using the following command:</p>
+<p>You already have the Argo Rollouts CLI in the OpenShift command line terminal. But if you want to install Argo Rollouts CLI in your local follow the <a href="https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation">official documentation</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then, check that the plugin is correctly installed using the following command:</p>
 </div>
 <div class="listingblock lines_space console-input">
 <div class="content">
@@ -741,7 +776,7 @@ cd dstrategies-app-deployment</code></pre>
 <div class="content">
 <img src="_images/github-token-01.png" alt="Step 1 to create a GitHub token">
 </div>
-<div class="title">Figure 5. Step 1 to create a GitHub token</div>
+<div class="title">Figure 7. Step 1 to create a GitHub token</div>
 </div>
 </li>
 </ul>
@@ -760,7 +795,7 @@ cd dstrategies-app-deployment</code></pre>
 <div class="content">
 <img src="_images/github-token-02.png" alt="Step 2 to create a GitHub token">
 </div>
-<div class="title">Figure 6. Step 2 to create a GitHub token</div>
+<div class="title">Figure 8. Step 2 to create a GitHub token</div>
 </div>
 </li>
 </ul>
