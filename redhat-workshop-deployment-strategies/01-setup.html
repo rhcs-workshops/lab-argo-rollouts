@@ -326,7 +326,7 @@
 <h2 id="01-prerequisites"><a class="anchor" href="#01-prerequisites"></a>Prerequisites (optional)</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>During this tutorial, it will be required to work with different tools for running the exercises included. We have already installed the Web Console operator with those tools. But if you want to use your terminal, please install the following software:</p>
+<p>During this laboratory, it will be required to work with different tools for running the exercises included. We have already installed the Web Console operator with those tools. But if you want to use your terminal, please install the following software:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -389,7 +389,7 @@ Please review the official documentation to install the latest versions of these
 </table>
 </div>
 <div class="paragraph">
-<p>It is also required to have a <a href="https://github.com">GitHub</a> account in order to create some repositories during this tutorial.</p>
+<p>It is also required to have a <a href="https://github.com">GitHub</a> account to create some repositories during this laboratory.</p>
 </div>
 </div>
 </div>
@@ -397,7 +397,7 @@ Please review the official documentation to install the latest versions of these
 <h2 id="01-laboratory"><a class="anchor" href="#01-laboratory"></a>Laboratory</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The technical exercises included in this tutorial are based on cloud native solutions which are extensively used in the IT market. Please review the following list which includes the basics around these cloud native solutions:</p>
+<p>The technical exercises included in this laboratory are based on cloud native solutions which are extensively used in the IT market. Please review the following list which includes the basics around these cloud native solutions:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -422,10 +422,10 @@ Please review the official documentation to install the latest versions of these
 </ul>
 </div>
 <div class="paragraph">
-<p>During this tutorial, a set of resources are provided by the instructor in order to be able to complete the exercises described in the following sections. The main objective of these resources is to provide a platform, multiple templates and other resources which are required to create different objects in Openshift.</p>
+<p>During this laboratory, a set of resources are provided by the instructor in order to be able to complete the exercises described in the following sections. The main objective of these resources is to provide a platform, multiple templates and other resources which are required to create different objects in Openshift.</p>
 </div>
 <div class="paragraph">
-<p>Please review the following list to have an overall understanding of the resources provided for completing this tutorial:</p>
+<p>Please review the following list to have an overall understanding of the resources provided for completing this laboratory:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -449,7 +449,7 @@ Please review the official documentation to install the latest versions of these
 <div class="sect2">
 <h3 id="01-parameters"><a class="anchor" href="#01-parameters"></a>Parameters</h3>
 <div class="paragraph">
-<p>The instructor provides the users with the necessary Openshift credentials and other important parameters at the beginning of this tutorial to access and complete the laboratory.</p>
+<p>The instructor provides the users with the necessary Openshift credentials and other important parameters at the beginning of this laboratory to access and complete the laboratory.</p>
 </div>
 <div class="paragraph">
 <p>The following table includes the parameters that the instructor should provide you at the beginning of the laboratory:</p>
@@ -516,7 +516,7 @@ Please review the official documentation to install the latest versions of these
 <div class="sect2">
 <h3 id="01-accessconsole"><a class="anchor" href="#01-accessconsole"></a>Access - OCP Console</h3>
 <div class="paragraph">
-<p>In order to check the laboratory environment, please access the Openshift Console via browser using your credentials:</p>
+<p>To check the laboratory environment, please access the Openshift Console via browser using your credentials:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -545,15 +545,15 @@ Use <strong>lab-users</strong> section to log in with your credentials.
 </div>
 </div>
 <div class="sect2">
-<h3 id="01-ocp-terminal"><a class="anchor" href="#01-ocp-terminal"></a>OpenShift command line terminal</h3>
+<h3 id="01-ocp-terminal"><a class="anchor" href="#01-ocp-terminal"></a>Web Console operator</h3>
 <div class="paragraph">
-<p>We have installed the OpenShift command line terminal with all the CLI that are needed for this laboratory.</p>
+<p>We have installed the Web Console operator with all the CLI that are needed for this laboratory.</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/oc_terminal1.png" alt="oc terminal1">
 </div>
-<div class="title">Figure 2. OpenShift command line terminal</div>
+<div class="title">Figure 2. Web Console operator</div>
 </div>
 <div class="paragraph">
 <p>In this terminal, you will be able to execute all the commands.</p>
@@ -566,7 +566,10 @@ Use <strong>lab-users</strong> section to log in with your credentials.
 </div>
 </div>
 <div class="sect2">
-<h3 id="01-accesscli"><a class="anchor" href="#01-accesscli"></a>Access - OC Client</h3>
+<h3 id="01-accesscli"><a class="anchor" href="#01-accesscli"></a>Access - OC Client (optional)</h3>
+<div class="paragraph">
+<p>If you are going to use Web Console operator, you do not need to execute this step.</p>
+</div>
 <div class="paragraph">
 <p>The OpenShift Container Platform CLI (which needs to be installed first) exposes the commands for managing your applications as well as the lower-level tools to interact with each component of your system. With the <strong>oc</strong> command, you can create applications and manage OpenShift Container Platform projects from a terminal.</p>
 </div>
@@ -587,6 +590,20 @@ Use <strong>lab-users</strong> section to log in with your credentials.
 </div>
 <div class="title">Figure 4. OC CLI Login Output</div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="01-accesscli"><a class="anchor" href="#01-accesscli"></a>OpenShift projects</h3>
+<div class="listingblock lines_space console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc projects</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/oc_projects_output.png" alt="&quot;OC CLI projects">
+</div>
+<div class="title">Figure 5. OC CLI projects</div>
+</div>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -594,7 +611,7 @@ Use <strong>lab-users</strong> section to log in with your credentials.
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Please pay special attention to <strong>oc CLI</strong> because you will need to use this tool several times during this tutorial.
+Please pay special attention to <strong>oc CLI</strong> because you will need to use this tool several times during this laboratory.
 </td>
 </tr>
 </table>
@@ -642,7 +659,7 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 <div class="content">
 <img src="_images/argocd_login.png" alt="ArgoCD login screen">
 </div>
-<div class="title">Figure 5. ArgoCD login screen</div>
+<div class="title">Figure 6. ArgoCD login screen</div>
 </div>
 <div class="paragraph">
 <p>If the login is successful, you will see the home screen where your applications will be created.</p>
@@ -651,7 +668,7 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 <div class="content">
 <img src="_images/argocd_applications.png" alt="ArgoCD applications">
 </div>
-<div class="title">Figure 6. ArgoCD applications</div>
+<div class="title">Figure 7. ArgoCD applications</div>
 </div>
 </div>
 <div class="sect2">
@@ -667,7 +684,7 @@ Please pay special attention to <strong>oc CLI</strong> because you will need to
 </td>
 <td class="content">
 <div class="paragraph">
-<p>You already have the Argo Rollouts CLI in the OpenShift command line terminal. But if you want to install Argo Rollouts CLI in your local follow the <a href="https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation">official documentation</a></p>
+<p>You already have the Argo Rollouts CLI in the Web Console operator. But if you want to install Argo Rollouts CLI in your local follow the <a href="https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation">official documentation</a></p>
 </div>
 </td>
 </tr>
@@ -776,7 +793,7 @@ cd dstrategies-app-deployment</code></pre>
 <div class="content">
 <img src="_images/github-token-01.png" alt="Step 1 to create a GitHub token">
 </div>
-<div class="title">Figure 7. Step 1 to create a GitHub token</div>
+<div class="title">Figure 8. Step 1 to create a GitHub token</div>
 </div>
 </li>
 </ul>
@@ -795,7 +812,7 @@ cd dstrategies-app-deployment</code></pre>
 <div class="content">
 <img src="_images/github-token-02.png" alt="Step 2 to create a GitHub token">
 </div>
-<div class="title">Figure 8. Step 2 to create a GitHub token</div>
+<div class="title">Figure 9. Step 2 to create a GitHub token</div>
 </div>
 </li>
 </ul>
