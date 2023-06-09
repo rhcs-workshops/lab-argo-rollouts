@@ -182,7 +182,7 @@ Then, check that the plugin is correctly installed using the following command:
 [.console-input]
 [source,bash, subs="+macros,+attributes"]
 ----
-oc argo rollouts list rollouts
+$ oc argo rollouts list rollouts
 ----
 [.console-output]
 [source,input,subs="+macros,+attributes"]
